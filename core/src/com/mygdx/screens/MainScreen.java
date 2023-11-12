@@ -1,11 +1,16 @@
 package com.mygdx.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -18,14 +23,17 @@ import com.mygdx.game.GameParams;
 import com.mygdx.game.producers.BulletProducer;
 import com.mygdx.game.producers.EnemyProducer;
 
+import java.awt.*;
+
 public class MainScreen implements Screen {
     //Screen
     private Camera camera;
     private Viewport viewport;
+    Stage stage;
     //Graphics
     private SpriteBatch spriteBatch;
     private Texture bgTexture;
-
+    private com.badlogic.gdx.scenes.scene2d.ui.Label score;
     //Timing
     private Texture[] backgrounds;
     private float[] bgOffsets = {0,0,0};
@@ -43,16 +51,28 @@ public class MainScreen implements Screen {
 
     // constructors
     public MainScreen(){
+
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
+        spriteBatch = new SpriteBatch();
+        stage = new Stage(viewport,spriteBatch);
+
+        com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
+        BitmapFont font = new BitmapFont();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.SKY;
+
+        score = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
+        stage.addActor(score);
+
         backgrounds = new Texture[3];
         backgrounds[0] = new Texture("bgBase.png");
         backgrounds[1] = new Texture("bgLayerFar.png");
         backgrounds[2] = new Texture("bgLayerNear.png");
         bgMaxSpeed = (float)(WORLD_HEIGHT) / 4;
-        spriteBatch = new SpriteBatch();
+
         player = new Player(20, 20, new Vector2(2.0F,2.0f));
-        enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,0)));
+        enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,-10)));
     }
 
 
@@ -63,10 +83,14 @@ public class MainScreen implements Screen {
     }
 
     public void  update(float deltaTime){
+        stage.act();
         player.update(deltaTime);
         enemyProducer.update(deltaTime);
         bulletProducer.update(deltaTime);
         detectCollisions();
+        if (enemyProducer.getEnemyList().isEmpty()){
+            enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,-10)));
+        }
     }
     public void detectCollisions(){
         Bullet currentBullet;
@@ -85,7 +109,7 @@ public class MainScreen implements Screen {
                        currentEnemy = enemyProducer.getEnemyList().get(j);
                        if (currentBullet.isIntersects(currentEnemy.getCollisionRect())){
                            bulletProducer.getBulletList().remove(i);
-                           currentEnemy.takeBulletDamage(currentBullet);
+                           player.addScore(currentEnemy.takeBulletDamage(currentBullet));
                            bulletsCount--;
                            i--;
                        }
@@ -117,9 +141,16 @@ public class MainScreen implements Screen {
         enemyProducer.render(spriteBatch);
         player.render(spriteBatch);
 
+        renderGUI(spriteBatch);
 
         spriteBatch.end();
+        stage.draw();
     }
+
+    private void renderGUI(SpriteBatch batch){
+        score.setText(String.valueOf(player.getScore()));
+    }
+
     private void renderBackground(float delta){
         bgOffsets[0] += delta * bgMaxSpeed / 4;
         bgOffsets[1] += delta * bgMaxSpeed / 2;

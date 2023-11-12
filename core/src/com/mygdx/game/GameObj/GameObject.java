@@ -17,11 +17,12 @@ abstract public class GameObject implements IRenderable , IUpdatable , ICollisio
     Vector2 speed;
     static Random rnd = new Random();
     Texture texture;
+    Rectangle collisingRect = new Rectangle(x,y,textureWidth,textureHeight);
 
     //методы
     @Override
     public Rectangle getCollisionRect() {
-        return new Rectangle(x,y,textureWidth,textureHeight);
+        return collisingRect;
     }
     @Override
     public boolean isIntersects(Rectangle otherCollisionRect){
@@ -37,5 +38,7 @@ abstract public class GameObject implements IRenderable , IUpdatable , ICollisio
     public void update(float deltaTime){
         this.x += this.speed.x * deltaTime;
         this.y+= this.speed.y * deltaTime;
+        collisingRect.x = this.x;
+        collisingRect.y = this.y;
     }
 }

@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.Timer;
 
 public class Player extends Actor implements IShootable {
+    int score;
     boolean doubleShot = false;
     double  speedConst = GameParams.WORLD_G;
     double playerSpeed = 1;
@@ -24,7 +25,15 @@ public class Player extends Actor implements IShootable {
     float timeSinceLastShoot = 0f;
     float reloadTime;
     float shootsPerMinute;
+
+    public int getScore(){
+        return score;
+    }
+    public void addScore(int addScore){
+        this.score += addScore;
+    }
     public Player(int x, int y, Vector2 speed){
+        score = 0;
         this.x = x;
         this.y = y;
         this.speed = speed;
