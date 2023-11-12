@@ -34,6 +34,7 @@ public class BulletProducer implements IRenderable {
                 currentBullet.render(batch);
             }
         }
+
     }
     public void update(float deltaTime){
         for (int i = 0; i < bulletList.size(); i++){
