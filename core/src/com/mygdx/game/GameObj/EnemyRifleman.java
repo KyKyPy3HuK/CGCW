@@ -19,9 +19,13 @@ public class EnemyRifleman extends Enemy implements IShootable {
         this.textureWidth = GameParams.ACTOR_SIZE;
         this.hitScore = GameParams.RIFLEMAN_HIT_SCORE;
         this.killScore = GameParams.RIFLEMAN_KILL_SCORE;
+        this.colliseScore = GameParams.RIFLEMAN_HIT_SCORE * 3;
         this.x = x;
         this.y = y;
-        this.collisingRect = new Rectangle(this.x,this.y,textureWidth,textureHeight);
+        this.collisingRect.x = this.x;
+        this.collisingRect.y = this.y;
+        this.collisingRect.height = textureHeight;
+        this.collisingRect.width = textureWidth;
     }
     @Override
     public void shoot(){

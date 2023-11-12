@@ -37,8 +37,8 @@ abstract public class GameObject implements IRenderable , IUpdatable , ICollisio
     @Override
     public void update(float deltaTime){
         this.x += this.speed.x * deltaTime;
-        this.y+= this.speed.y * deltaTime;
-        collisingRect.x = this.x;
-        collisingRect.y = this.y;
+        this.y += this.speed.y * deltaTime;
+        collisingRect.x += this.speed.x * deltaTime;
+        collisingRect.y += this.speed.y * deltaTime;
     }
 }

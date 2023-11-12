@@ -21,9 +21,13 @@ public class Bullet extends GameObject{
         this.x = x;
         this.y = y;
         this.speed = new Vector2(actor.bulletSpd);
-        this.speed.y += actor.speed.y / 2 ;
+        this.speed.y += actor.speed.y / 2;
         this.speed.x += actor.speed.x / 2 + rnd.nextFloat(- actor.bulletSpread, actor.bulletSpread);
         this.damage = actor.bulletDmg;
+        this.collisingRect.x = this.x;
+        this.collisingRect.y = this.y;
+        this.collisingRect.height = textureHeight;
+        this.collisingRect.width = textureWidth;
     }
 
     @Override

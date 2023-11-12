@@ -99,6 +99,17 @@ public class MainScreen implements Screen {
         int bulletsCount = bulletProducer.getBulletList().size();
         int enemyCnt = enemyProducer.getEnemyList().size();
 
+        // столкновения с врагами
+        for (int i = 0; i < enemyCnt; i++){
+            currentEnemy = enemyProducer.getEnemyList().get(i);
+            if(player.isIntersects(currentEnemy.getCollisionRect())){
+                player.takeMeeleeDamage(currentEnemy);
+                player.addScore(currentEnemy.takeMeeleeDamage(player));
+                player.reverseSpeed(currentEnemy.getX(),currentEnemy.getY());
+            }
+        }
+
+        // обработка столкновения пуль
        for (int i = 0; i < bulletsCount; i++){
            currentBullet = bulletProducer.getBulletList().get(i);
 

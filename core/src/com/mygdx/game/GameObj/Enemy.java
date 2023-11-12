@@ -48,4 +48,12 @@ abstract public class Enemy extends Actor implements ISpawnable {
         }
         return this.hitScore;
     }
+    @Override
+    public int takeMeeleeDamage(Actor actor) {
+        this.hp -= actor.meleeDmg;
+        if (this.hp <= 0){
+            return this.killScore + this.colliseScore;
+        }
+        return this.colliseScore;
+    }
 }

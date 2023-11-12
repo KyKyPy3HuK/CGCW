@@ -41,6 +41,7 @@ public class Player extends Actor implements IShootable {
         this.texture = new Texture("spaceShip.png");
         bulletSpd = new Vector2(0,50);
         bulletDmg = 20;
+        meleeDmg = 40;
         this.bulletSpread = 1;
         shootsPerMinute = 600;
         this.reloadTime = 60 / shootsPerMinute;
@@ -48,10 +49,18 @@ public class Player extends Actor implements IShootable {
         super.playerTeam = GameParams.PLAYER_TEAM;
         super.textureHeight = GameParams.ACTOR_SIZE;
         super.textureWidth = GameParams.ACTOR_SIZE;
+        this.collisingRect.x = this.x + 1;
+        this.collisingRect.y = this.y + 1;
+        this.collisingRect.height = textureHeight - 2;
+        this.collisingRect.width = textureWidth  - 2;
     }
     @Override
     public void die(int killerTeam) {
 
+    }
+    public void reverseSpeed(float x, float y){
+        this.speed.y =  (this.y - y) * 5 ;
+        this.speed.x =  (this.x - x) * 5;
     }
     @Override
     public void render(SpriteBatch batch) {
