@@ -2,29 +2,40 @@ package com.mygdx.game.GameObj;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.interfaces.ICollisionable;
 import com.mygdx.game.interfaces.IRenderable;
 import com.mygdx.game.interfaces.IUpdatable;
 
 import java.util.Random;
 
-abstract public class GameObject implements IRenderable , IUpdatable {
+abstract public class GameObject implements IRenderable , IUpdatable , ICollisionable {
+    // Поля
     float x,  y;
-    int textureWidth, textureHeight;
-
+    float textureWidth, textureHeight;
     Vector2 speed;
     static Random rnd = new Random();
-
     Texture texture;
+
+    //методы
     @Override
-    public void update(float deltaTime){
-        this.x += this.speed.x * deltaTime;
-        this.y+= this.speed.y * deltaTime;
+    public Rectangle getCollisionRect() {
+        return new Rectangle(x,y,textureWidth,textureHeight);
+    }
+    @Override
+    public boolean isIntersects(Rectangle otherCollisionRect){
+        return this.getCollisionRect().overlaps(otherCollisionRect);
     }
     public float getX(){
         return this.x;
     }
     public float getY(){
         return this.y;
+    }
+    @Override
+    public void update(float deltaTime){
+        this.x += this.speed.x * deltaTime;
+        this.y+= this.speed.y * deltaTime;
     }
 }

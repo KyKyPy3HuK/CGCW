@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.IShootable;
 import com.mygdx.screens.MainScreen;
 import jdk.internal.org.jline.utils.ShutdownHooks;
@@ -17,59 +18,50 @@ import java.util.Timer;
 
 public class Player extends Actor implements IShootable {
     boolean doubleShot = false;
-    double  speedConst = 0.2;
+    double  speedConst = GameParams.WORLD_G;
     double playerSpeed = 1;
     float playerMaxSpeed = 30;
     float timeSinceLastShoot = 0f;
     float reloadTime;
     float shootsPerMinute;
-
-    List<Bullet> bulletList;
     public Player(int x, int y, Vector2 speed){
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.bulletTexture = new Texture("bulletSmall.png");
         this.texture = new Texture("spaceShip.png");
-        //bulletList = new LinkedList<>();
         bulletSpd = new Vector2(0,50);
-        bulletDmg = 3;
+        bulletDmg = 20;
         this.bulletSpread = 1;
         shootsPerMinute = 600;
         this.reloadTime = 60 / shootsPerMinute;
         this.bulletSize = 1;
-        super.playerTeam = PLAYER_TEAM;
+        super.playerTeam = GameParams.PLAYER_TEAM;
+        super.textureHeight = GameParams.ACTOR_SIZE;
+        super.textureWidth = GameParams.ACTOR_SIZE;
     }
-
     @Override
     public void die(int killerTeam) {
 
     }
-
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(this.texture,this.x,this.y,ACTOR_SIZE,ACTOR_SIZE);
-        //bulletListRender(batch);
+        batch.draw(this.texture,this.x,this.y,GameParams.ACTOR_SIZE,GameParams.ACTOR_SIZE);
     }
-
     public Bullet shootBullet(){
         return new Bullet(this.x,this.y,this);
     }
-
     @Override
     public void shoot() {
          // seconds
         if (isReadyToShoot()){
             if(doubleShot){
                 MainScreen.bulletProducer.addBullet(new Bullet(this.x + 1,this.y + 4,this));
-                //bulletList.add(new Bullet(this.x + 1,this.y + 4, this));
                 doubleShot = false;
             }
             else
             {
                 MainScreen.bulletProducer.addBullet(new Bullet(this.x + 4,this.y + 4,this));
-                //bulletList.add(new Bullet(this.x + 4,this.y + 4,this));
-
                 doubleShot = true;
             }
             timeSinceLastShoot = 0;
@@ -79,24 +71,23 @@ public class Player extends Actor implements IShootable {
         return (timeSinceLastShoot - reloadTime >= 0);
     }
 
-    void bulletListUpdate(float deltaTime){
-
-        for (int i = 0; i < bulletList.size(); ++i)
-        {
-            bulletList.get(i).update(deltaTime);;
-            if (bulletList.get(i).y > 100) {
-                bulletList.remove(i);
-            }
-        }
-    }
-    void bulletListRender(SpriteBatch batch){
-        for (Bullet bullet: bulletList
-        ) {
-            bullet.render(batch);
-        }
-    }
     public void update(float deltaTime){
         super.update(deltaTime);
+        if (this.x > GameParams.WORLD_WIDTH - 6){
+            this.x = GameParams.WORLD_WIDTH - 6;
+            this.speed.x = 0;
+        } else if (this.x < 0){
+            this.x = 0;
+            this.speed.x = 0;
+        }
+
+        if (this.y > GameParams.WORLD_HEIGHT - 6){
+            this.y = GameParams.WORLD_HEIGHT - 6;
+            this.speed.y = 0;
+        } else if (this.y < 0){
+            this.y = 0;
+            this.speed.y = 0;
+        }
 
         timeSinceLastShoot += deltaTime;
 
@@ -106,9 +97,6 @@ public class Player extends Actor implements IShootable {
         if(!playerKeyControl()[1]){
             playerSpeedDownY();
         }
-
-        //bulletListUpdate(deltaTime);
-
     }
     boolean[] playerKeyControl(){
         boolean isMovingX = false;

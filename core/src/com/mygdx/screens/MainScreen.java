@@ -10,9 +10,13 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.GameObj.Bullet;
+import com.mygdx.game.GameObj.Enemy;
+import com.mygdx.game.GameObj.EnemyRifleman;
 import com.mygdx.game.GameObj.Player;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.producers.BulletProducer;
+import com.mygdx.game.producers.EnemyProducer;
 
 public class MainScreen implements Screen {
     //Screen
@@ -34,6 +38,10 @@ public class MainScreen implements Screen {
     //Game objects & prodicers
     private Player player;
     public static BulletProducer bulletProducer = new BulletProducer();
+    public static EnemyProducer enemyProducer = new EnemyProducer();
+
+
+    // constructors
     public MainScreen(){
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
@@ -44,8 +52,11 @@ public class MainScreen implements Screen {
         bgMaxSpeed = (float)(WORLD_HEIGHT) / 4;
         spriteBatch = new SpriteBatch();
         player = new Player(20, 20, new Vector2(2.0F,2.0f));
+        enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,0)));
     }
 
+
+    // methods
     @Override
     public void show() {
 
@@ -53,9 +64,47 @@ public class MainScreen implements Screen {
 
     public void  update(float deltaTime){
         player.update(deltaTime);
+        enemyProducer.update(deltaTime);
         bulletProducer.update(deltaTime);
+        detectCollisions();
     }
+    public void detectCollisions(){
+        Bullet currentBullet;
+        Enemy currentEnemy;
 
+        int bulletsCount = bulletProducer.getBulletList().size();
+        int enemyCnt = enemyProducer.getEnemyList().size();
+
+       for (int i = 0; i < bulletsCount; i++){
+           currentBullet = bulletProducer.getBulletList().get(i);
+
+
+           switch (currentBullet.playerTeam){
+               case(GameParams.PLAYER_TEAM):{
+                   for (int j = 0; j < enemyCnt; j++){
+                       currentEnemy = enemyProducer.getEnemyList().get(j);
+                       if (currentBullet.isIntersects(currentEnemy.getCollisionRect())){
+                           bulletProducer.getBulletList().remove(i);
+                           currentEnemy.takeBulletDamage(currentBullet);
+                           bulletsCount--;
+                           i--;
+                       }
+                   }
+                   break;
+               }
+               case (GameParams.ENEMY_TEAM):{
+                   if (currentBullet.isIntersects(player.getCollisionRect())){
+                       //player.takeBulletDamage(currentBullet);
+                   }
+                   break;
+               }
+           }
+
+
+
+       }
+
+    }
     @Override
     public void render(float delta) {
         this.update(delta);
@@ -65,7 +114,10 @@ public class MainScreen implements Screen {
         // прокрутка фона
         renderBackground(delta);
         bulletProducer.render(spriteBatch);
+        enemyProducer.render(spriteBatch);
         player.render(spriteBatch);
+
+
         spriteBatch.end();
     }
     private void renderBackground(float delta){

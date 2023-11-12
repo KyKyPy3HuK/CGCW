@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends GameObject{
-    int playerTeam;
+    public int playerTeam;
     int damage;
     int bulletSize;
     @Override
@@ -16,6 +16,8 @@ public class Bullet extends GameObject{
     public Bullet(float x,float y, Actor actor){
         this.texture = actor.bulletTexture;
         this.bulletSize = actor.bulletSize;
+        this.textureHeight = bulletSize;
+        this.textureWidth = bulletSize;
         this.x = x;
         this.y = y;
         this.speed = new Vector2(actor.bulletSpd);

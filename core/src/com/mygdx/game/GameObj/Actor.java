@@ -2,14 +2,12 @@ package com.mygdx.game.GameObj;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.interfaces.IDamageable;
 import com.mygdx.game.interfaces.IMortal;
 
-public abstract class Actor extends GameObject implements IMortal {
-    static final int PLAYER_TEAM = 0;
-    static final int ALLY_TEAM = 1;
-    static final int ENEMY_TEAM = 2;
+public abstract class Actor extends GameObject implements IMortal, IDamageable {
+
     public int playerTeam;
-    public static final int ACTOR_SIZE = 6;
     public int bulletDmg,
             meleeDmg;
     Vector2 bulletSpd;
@@ -18,4 +16,21 @@ public abstract class Actor extends GameObject implements IMortal {
     public int bulletSpread;
     int hp;
 
+    @Override
+    public int takeBulletDamage(Bullet bullet) {
+
+        this.hp -= bullet.damage;
+        return bullet.damage;
+    }
+
+    @Override
+    public int takeMeeleeDamage(Actor actor) {
+        this.hp -= actor.meleeDmg;
+        return actor.meleeDmg;
+    }
+
+    @Override
+    public boolean isDead() {
+        return this.hp <= 0;
+    }
 }

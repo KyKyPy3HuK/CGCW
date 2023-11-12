@@ -4,14 +4,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.GameObj.Bullet;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.IRenderable;
+import com.mygdx.game.interfaces.IUpdatable;
 
 import javax.swing.*;
 import java.util.LinkedList;
 
-public class BulletProducer implements IRenderable {
+public class BulletProducer implements IRenderable, IUpdatable {
     LinkedList<Bullet> bulletList;
     Bullet currentBullet;
     float x,y;
+
+    public LinkedList<Bullet> getBulletList(){
+        return bulletList;
+    }
 
     public BulletProducer(){
          bulletList = new LinkedList<>();

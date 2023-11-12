@@ -1,6 +1,7 @@
 package com.mygdx.game.GameObj;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.ISpawnable;
 
 abstract public class Enemy extends Actor implements ISpawnable {
@@ -22,7 +23,7 @@ abstract public class Enemy extends Actor implements ISpawnable {
         this.moveRange = stats.moveRange;
     }
     public Enemy(){
-        super.playerTeam = ENEMY_TEAM;
+        super.playerTeam = GameParams.ENEMY_TEAM;
     }
     @Override
     public void update(float deltaTime){
@@ -30,7 +31,7 @@ abstract public class Enemy extends Actor implements ISpawnable {
     }
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(this.texture,this.x,this.y);
+        batch.draw(this.texture,this.x,this.y,this.textureWidth,this.textureHeight);
     }
 
 }

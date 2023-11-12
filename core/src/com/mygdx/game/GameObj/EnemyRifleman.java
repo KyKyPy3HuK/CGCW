@@ -1,16 +1,23 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.IShootable;
 
 public class EnemyRifleman extends Enemy implements IShootable {
 
 
-    public EnemyRifleman(Vector2 speed){
-
-
-
+    public EnemyRifleman(float x, float y, Vector2 speed){
+        super();
+        this.hp = 100;
+        this.texture = new Texture("enemyRifleman.png");
+        this.speed = new Vector2(speed);
+        this.textureHeight = GameParams.ACTOR_SIZE;
+        this.textureWidth = GameParams.ACTOR_SIZE;
+        this.x = x;
+        this.y = y;
     }
     @Override
     public void shoot(){
