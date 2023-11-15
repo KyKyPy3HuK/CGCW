@@ -5,5 +5,5 @@ import com.mygdx.game.GameObj.Bullet;
 
 public interface IDamageable {
     int takeBulletDamage(Bullet bullet);
-    int takeMeeleeDamage(Actor actor);
+    int takeMeleeDamage(Actor actor);
 }

@@ -34,6 +34,7 @@ public class BulletProducer implements IRenderable, IUpdatable {
             y = currentBullet.getY();
             if (x > GameParams.WORLD_WIDTH + 5 || x < -5 || y > GameParams.WORLD_HEIGHT + 5 || y < -5){
                 bulletList.remove(i);
+                i--;
             }
             else{
                 currentBullet.render(batch);

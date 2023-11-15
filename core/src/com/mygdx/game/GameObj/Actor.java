@@ -15,7 +15,12 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     public int bulletSize;
     public int bulletSpread;
     int hp;
-
+    public int getHp(){
+        return this.hp;
+    }
+    public int getMeleeDmg(){
+        return this.meleeDmg;
+    }
     @Override
     public int takeBulletDamage(Bullet bullet) {
 
@@ -24,8 +29,8 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     }
 
     @Override
-    public int takeMeeleeDamage(Actor actor) {
-        this.hp -= actor.meleeDmg;
+    public int takeMeleeDamage(Actor actor) {
+        this.hp -= actor.getMeleeDmg();
         return actor.meleeDmg;
     }
 

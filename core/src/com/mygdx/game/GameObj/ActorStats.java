@@ -11,19 +11,19 @@ public class ActorStats {
     public int hpRegen;
     public int bulletDmg;
     public int meleeDmg;
-    public int bulletSpd;
+    public Vector2 bulletSpd;
     public Vector2 speed;
     public int team;
 
     public ActorStats(){
-        hp = 100;
+        hp = 0;
         hpRegen = 0;
         bulletDmg = 0;
         meleeDmg = 0;
-        bulletSpd = 10;
-        team = -1;
+        bulletSpd = new Vector2(0,0);
+        team = 0;
         speed = new Vector2(0,0);
-        moveRange = 100;
-        speedAclr = 0.5f;
+        moveRange = 0;
+        speedAclr = 0;
     }
 }

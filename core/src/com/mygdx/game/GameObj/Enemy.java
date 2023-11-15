@@ -6,9 +6,6 @@ import com.mygdx.game.interfaces.ISpawnable;
 
 abstract public class Enemy extends Actor implements ISpawnable {
 
-    int meleeDmg;
-    int bulletDmg;
-    int bulletSpd;
     int hpRegen;
     public int hitScore;
     public int colliseScore;
@@ -49,7 +46,7 @@ abstract public class Enemy extends Actor implements ISpawnable {
         return this.hitScore;
     }
     @Override
-    public int takeMeeleeDamage(Actor actor) {
+    public int takeMeleeDamage(Actor actor) {
         this.hp -= actor.meleeDmg;
         if (this.hp <= 0){
             return this.killScore + this.colliseScore;

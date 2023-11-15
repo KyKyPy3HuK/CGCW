@@ -8,13 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.IShootable;
 import com.mygdx.screens.MainScreen;
-import jdk.internal.org.jline.utils.ShutdownHooks;
-
-import javax.swing.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
 
 public class Player extends Actor implements IShootable {
     int score;
@@ -33,26 +26,31 @@ public class Player extends Actor implements IShootable {
         this.score += addScore;
     }
     public Player(int x, int y, Vector2 speed){
-        score = 0;
+        this.hp = 100;
+        this.score = 0;
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.bulletTexture = new Texture("bulletSmall.png");
         this.texture = new Texture("spaceShip.png");
-        bulletSpd = new Vector2(0,50);
-        bulletDmg = 20;
-        meleeDmg = 40;
+        this.bulletSpd = new Vector2(0,50);
+        this.bulletDmg = 20;
+        this.meleeDmg = 40;
         this.bulletSpread = 1;
-        shootsPerMinute = 600;
+        this.shootsPerMinute = 600;
         this.reloadTime = 60 / shootsPerMinute;
         this.bulletSize = 1;
         super.playerTeam = GameParams.PLAYER_TEAM;
         super.textureHeight = GameParams.ACTOR_SIZE;
         super.textureWidth = GameParams.ACTOR_SIZE;
-        this.collisingRect.x = this.x + 1;
-        this.collisingRect.y = this.y + 1;
-        this.collisingRect.height = textureHeight - 2;
-        this.collisingRect.width = textureWidth  - 2;
+        this.collisionOffsetX = 1;
+        this.collisionOffsetY = 1;
+        this.collisionHeight = 4;
+        this.collisionWidth = 4;
+        this.collisionRect.x = this.x + collisionOffsetX;
+        this.collisionRect.y = this.y + collisionOffsetY;
+        this.collisionRect.height = collisionHeight;
+        this.collisionRect.width = collisionWidth;
     }
     @Override
     public void die(int killerTeam) {
@@ -180,6 +178,12 @@ public class Player extends Actor implements IShootable {
             this.speed.y = 0;
         } else if (this.speed.y < 0 && this.speed.y > -(speedConst)) {
             this.speed.y = 0;
+        }
+    }
+
+    public void takeBonus(Item item){
+        if (item.getClass() == MedKit.class){
+            this.hp += item.bonusStats.hp;
         }
     }
 }

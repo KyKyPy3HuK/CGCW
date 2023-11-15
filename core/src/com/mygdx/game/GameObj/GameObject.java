@@ -1,7 +1,6 @@
 package com.mygdx.game.GameObj;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.interfaces.ICollisionable;
@@ -14,15 +13,17 @@ abstract public class GameObject implements IRenderable , IUpdatable , ICollisio
     // Поля
     float x,  y;
     float textureWidth, textureHeight;
+    float collisionWidth,collisionHeight;
+    float collisionOffsetX = 0, collisionOffsetY = 0;
     Vector2 speed;
     static Random rnd = new Random();
     Texture texture;
-    Rectangle collisingRect = new Rectangle(x,y,textureWidth,textureHeight);
+    Rectangle collisionRect = new Rectangle(x + collisionOffsetX,y + collisionOffsetY, collisionWidth, collisionHeight);
 
     //методы
     @Override
     public Rectangle getCollisionRect() {
-        return collisingRect;
+        return collisionRect;
     }
     @Override
     public boolean isIntersects(Rectangle otherCollisionRect){
@@ -38,7 +39,9 @@ abstract public class GameObject implements IRenderable , IUpdatable , ICollisio
     public void update(float deltaTime){
         this.x += this.speed.x * deltaTime;
         this.y += this.speed.y * deltaTime;
-        collisingRect.x += this.speed.x * deltaTime;
-        collisingRect.y += this.speed.y * deltaTime;
+        collisionRect.x = x + collisionOffsetX;
+        collisionRect.y = y + collisionOffsetY;
+        collisionRect.width = collisionWidth;
+        collisionRect.height = collisionHeight;
     }
 }

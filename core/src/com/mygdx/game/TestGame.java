@@ -22,8 +22,6 @@ public class TestGame extends Game {
 		batch = new SpriteBatch();
 		gameScreen = new MainScreen();
 		setScreen(gameScreen);
-
-
 	}
 
 	@Override
@@ -32,7 +30,6 @@ public class TestGame extends Game {
 	}
 
 	public void  update(){
-
 	}
 
 	@Override
@@ -40,15 +37,12 @@ public class TestGame extends Game {
 		this.update();
 		super.render();
 
-
-
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		gameScreen.render(0);
 
 		batch.begin();
-
 		batch.end();
 	}
 

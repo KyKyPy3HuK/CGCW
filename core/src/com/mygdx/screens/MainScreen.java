@@ -1,7 +1,5 @@
 package com.mygdx.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -11,19 +9,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.GameObj.Bullet;
-import com.mygdx.game.GameObj.Enemy;
-import com.mygdx.game.GameObj.EnemyRifleman;
-import com.mygdx.game.GameObj.Player;
+import com.mygdx.game.GameObj.*;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.producers.BulletProducer;
 import com.mygdx.game.producers.EnemyProducer;
-
-import java.awt.*;
+import com.mygdx.game.producers.ItemProducer;
 
 public class MainScreen implements Screen {
     //Screen
@@ -33,7 +25,7 @@ public class MainScreen implements Screen {
     //Graphics
     private SpriteBatch spriteBatch;
     private Texture bgTexture;
-    private com.badlogic.gdx.scenes.scene2d.ui.Label score;
+    private com.badlogic.gdx.scenes.scene2d.ui.Label score, health;
     //Timing
     private Texture[] backgrounds;
     private float[] bgOffsets = {0,0,0};
@@ -47,7 +39,7 @@ public class MainScreen implements Screen {
     private Player player;
     public static BulletProducer bulletProducer = new BulletProducer();
     public static EnemyProducer enemyProducer = new EnemyProducer();
-
+    public static ItemProducer itemProducer = new ItemProducer();
 
     // constructors
     public MainScreen(){
@@ -62,8 +54,16 @@ public class MainScreen implements Screen {
         labelStyle.font = font;
         labelStyle.fontColor = Color.SKY;
 
+
         score = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
+        score.setFontScale(0.2f);
+        score.setPosition(2,5);
         stage.addActor(score);
+
+        health = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
+        health.setFontScale(0.2f);
+        health.setPosition(2,0);
+        stage.addActor(health);
 
         backgrounds = new Texture[3];
         backgrounds[0] = new Texture("bgBase.png");
@@ -73,6 +73,7 @@ public class MainScreen implements Screen {
 
         player = new Player(20, 20, new Vector2(2.0F,2.0f));
         enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,-10)));
+        itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
     }
 
 
@@ -84,27 +85,46 @@ public class MainScreen implements Screen {
 
     public void  update(float deltaTime){
         stage.act();
+        detectCollisions();
         player.update(deltaTime);
         enemyProducer.update(deltaTime);
         bulletProducer.update(deltaTime);
-        detectCollisions();
+        itemProducer.update(deltaTime);
+
         if (enemyProducer.getEnemyList().isEmpty()){
-            enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,-10)));
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+        }
+        if (itemProducer.getItemsCount() == 0){
+            itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
+
         }
     }
     public void detectCollisions(){
+        Item currentItem;
         Bullet currentBullet;
         Enemy currentEnemy;
 
         int bulletsCount = bulletProducer.getBulletList().size();
         int enemyCnt = enemyProducer.getEnemyList().size();
 
+        // бонусы
+        for (int i = 0; i < itemProducer.getItemsCount(); i++){
+            currentItem = itemProducer.getItem(i);
+            if (player.isIntersects(currentItem.getCollisionRect())){
+                player.takeBonus(currentItem);
+                itemProducer.removeItem(i);
+                i--;
+            }
+        }
+
         // столкновения с врагами
         for (int i = 0; i < enemyCnt; i++){
             currentEnemy = enemyProducer.getEnemyList().get(i);
             if(player.isIntersects(currentEnemy.getCollisionRect())){
-                player.takeMeeleeDamage(currentEnemy);
-                player.addScore(currentEnemy.takeMeeleeDamage(player));
+                player.takeMeleeDamage(currentEnemy);
+                player.addScore(currentEnemy.takeMeleeDamage(player));
                 player.reverseSpeed(currentEnemy.getX(),currentEnemy.getY());
             }
         }
@@ -112,7 +132,6 @@ public class MainScreen implements Screen {
         // обработка столкновения пуль
        for (int i = 0; i < bulletsCount; i++){
            currentBullet = bulletProducer.getBulletList().get(i);
-
 
            switch (currentBullet.playerTeam){
                case(GameParams.PLAYER_TEAM):{
@@ -129,7 +148,10 @@ public class MainScreen implements Screen {
                }
                case (GameParams.ENEMY_TEAM):{
                    if (currentBullet.isIntersects(player.getCollisionRect())){
-                       //player.takeBulletDamage(currentBullet);
+                       player.takeBulletDamage(currentBullet);
+                       bulletProducer.getBulletList().remove(i);
+                       bulletsCount--;
+                       i--;
                    }
                    break;
                }
@@ -148,6 +170,7 @@ public class MainScreen implements Screen {
 
         // прокрутка фона
         renderBackground(delta);
+        itemProducer.render(spriteBatch);
         bulletProducer.render(spriteBatch);
         enemyProducer.render(spriteBatch);
         player.render(spriteBatch);
@@ -159,6 +182,7 @@ public class MainScreen implements Screen {
     }
 
     private void renderGUI(SpriteBatch batch){
+        health.setText(String.valueOf(player.getHp()));
         score.setText(String.valueOf(player.getScore()));
     }
 
