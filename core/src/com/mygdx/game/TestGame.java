@@ -3,24 +3,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.GameObj.Asteroid;
-import com.mygdx.game.GameObj.AsteroidProducer;
-import com.mygdx.game.GameObj.Player;
-import com.mygdx.screens.MainScreen;
+import com.mygdx.screens.GameScreen;
 
 public class TestGame extends Game {
 	SpriteBatch batch;
-	MainScreen gameScreen;
+	GameScreen gameScreen;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		gameScreen = new MainScreen();
+		gameScreen = new GameScreen();
 		setScreen(gameScreen);
 	}
 

@@ -1,12 +1,12 @@
 package com.mygdx.game.GameObj;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.interfaces.IDamageable;
 import com.mygdx.game.interfaces.IMortal;
 
 public abstract class Actor extends GameObject implements IMortal, IDamageable {
-
     public int playerTeam;
     public int bulletDmg,
             meleeDmg;
@@ -15,6 +15,7 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     public int bulletSize;
     public int bulletSpread;
     int hp;
+    float acceleration;
     public int getHp(){
         return this.hp;
     }

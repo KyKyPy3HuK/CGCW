@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.IShootable;
-import com.mygdx.screens.MainScreen;
+import com.mygdx.screens.GameScreen;
 
 public class Player extends Actor implements IShootable {
     int score;
+    int ammo;
     boolean doubleShot = false;
     double  speedConst = GameParams.WORLD_G;
-    double playerSpeed = 1;
     float playerMaxSpeed = 30;
     float timeSinceLastShoot = 0f;
     float reloadTime;
@@ -25,9 +25,15 @@ public class Player extends Actor implements IShootable {
     public void addScore(int addScore){
         this.score += addScore;
     }
+
+    public int getAmmo(){
+        return this.ammo;
+    }
     public Player(int x, int y, Vector2 speed){
         this.hp = 100;
         this.score = 0;
+        this.ammo = 333;
+        this.acceleration = 0.5f;
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -72,19 +78,21 @@ public class Player extends Actor implements IShootable {
          // seconds
         if (isReadyToShoot()){
             if(doubleShot){
-                MainScreen.bulletProducer.addBullet(new Bullet(this.x + 1,this.y + 4,this));
+                GameScreen.bulletProducer.addBullet(new Bullet(this.x + 1,this.y + 4,this));
+                ammo --;
                 doubleShot = false;
             }
             else
             {
-                MainScreen.bulletProducer.addBullet(new Bullet(this.x + 4,this.y + 4,this));
+                GameScreen.bulletProducer.addBullet(new Bullet(this.x + 4,this.y + 4,this));
+                ammo--;
                 doubleShot = true;
             }
             timeSinceLastShoot = 0;
         }
     }
     boolean isReadyToShoot(){
-        return (timeSinceLastShoot - reloadTime >= 0);
+        return (timeSinceLastShoot - reloadTime >= 0) && ammo > 0;
     }
 
     public void update(float deltaTime){
@@ -119,19 +127,19 @@ public class Player extends Actor implements IShootable {
         boolean isMovingY = false;
         //moving
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            this.speed.y += playerSpeed;
+            this.speed.y += acceleration;
             isMovingY = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            this.speed.y -= playerSpeed;
+            this.speed.y -= acceleration;
             isMovingY = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)){
-            this.speed.x += playerSpeed;
+            this.speed.x += acceleration;
             isMovingX = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)){
-            this.speed.x -= playerSpeed;
+            this.speed.x -= acceleration;
             isMovingX = true;
         }
         if (this.speed.x > this.playerMaxSpeed){
@@ -182,8 +190,11 @@ public class Player extends Actor implements IShootable {
     }
 
     public void takeBonus(Item item){
-        if (item.getClass() == MedKit.class){
-            this.hp += item.bonusStats.hp;
-        }
+        this.hp += item.bonusStats.hp;
+        this.ammo += item.bonusStats.ammo;
+        this.acceleration += item.bonusStats.acceleration;
+        this.playerMaxSpeed += item.bonusStats.maxSpeed;
+        this.shootsPerMinute += item.bonusStats.shootingRate;
+        this.reloadTime = 60 / this.shootsPerMinute;
     }
 }

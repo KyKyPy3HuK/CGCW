@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.IShootable;
-import com.mygdx.screens.MainScreen;
+import com.mygdx.screens.GameScreen;
 
 public class EnemyRifleman extends Enemy implements IShootable {
     boolean doubleShot;
@@ -43,12 +43,12 @@ public class EnemyRifleman extends Enemy implements IShootable {
     public void shoot(){
         if (isReadyToShoot()){
             if(doubleShot){
-                MainScreen.bulletProducer.addBullet(new Bullet(this.x + 1,this.y + 1,this));
+                GameScreen.bulletProducer.addBullet(new Bullet(this.x + 1,this.y + 1,this));
                 doubleShot = false;
             }
             else
             {
-                MainScreen.bulletProducer.addBullet(new Bullet(this.x + 4,this.y + 1,this));
+                GameScreen.bulletProducer.addBullet(new Bullet(this.x + 4,this.y + 1,this));
                 doubleShot = true;
             }
             timeSinceLastShoot = 0;

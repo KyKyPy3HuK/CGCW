@@ -15,9 +15,11 @@ import com.mygdx.game.GameObj.*;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.producers.BulletProducer;
 import com.mygdx.game.producers.EnemyProducer;
+import com.mygdx.game.producers.FXProducer;
 import com.mygdx.game.producers.ItemProducer;
 
-public class MainScreen implements Screen {
+public class GameScreen implements Screen {
+    float stateTime;
     //Screen
     private Camera camera;
     private Viewport viewport;
@@ -25,7 +27,9 @@ public class MainScreen implements Screen {
     //Graphics
     private SpriteBatch spriteBatch;
     private Texture bgTexture;
-    private com.badlogic.gdx.scenes.scene2d.ui.Label score, health;
+    private com.badlogic.gdx.scenes.scene2d.ui.Label score,
+                                                    health,
+                                                    ammo;
     //Timing
     private Texture[] backgrounds;
     private float[] bgOffsets = {0,0,0};
@@ -40,9 +44,12 @@ public class MainScreen implements Screen {
     public static BulletProducer bulletProducer = new BulletProducer();
     public static EnemyProducer enemyProducer = new EnemyProducer();
     public static ItemProducer itemProducer = new ItemProducer();
+    public static FXProducer fxProducer = new FXProducer();
 
     // constructors
-    public MainScreen(){
+    public GameScreen(){
+
+        stateTime = 0;
 
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
@@ -60,6 +67,11 @@ public class MainScreen implements Screen {
         score.setPosition(2,5);
         stage.addActor(score);
 
+        ammo = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
+        ammo.setFontScale(0.2f);
+        ammo.setPosition(2,10);
+        stage.addActor(ammo);
+
         health = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
         health.setFontScale(0.2f);
         health.setPosition(2,0);
@@ -74,6 +86,8 @@ public class MainScreen implements Screen {
         player = new Player(20, 20, new Vector2(2.0F,2.0f));
         enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,-10)));
         itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
+        itemProducer.addItem(new AmmoBonus(10,100,new Vector2(0,-10)));
+
     }
 
 
@@ -90,15 +104,22 @@ public class MainScreen implements Screen {
         enemyProducer.update(deltaTime);
         bulletProducer.update(deltaTime);
         itemProducer.update(deltaTime);
-
+        fxProducer.update(deltaTime);
         if (enemyProducer.getEnemyList().isEmpty()){
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
+            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
             enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
             enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
             enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
         }
         if (itemProducer.getItemsCount() == 0){
             itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
-
+            itemProducer.addItem(new AmmoBonus(15,100,new Vector2(0,-15)));
+            itemProducer.addItem(new ReloadBonus(15,100,new Vector2(0,-15)));
         }
     }
     public void detectCollisions(){
@@ -138,10 +159,14 @@ public class MainScreen implements Screen {
                    for (int j = 0; j < enemyCnt; j++){
                        currentEnemy = enemyProducer.getEnemyList().get(j);
                        if (currentBullet.isIntersects(currentEnemy.getCollisionRect())){
-                           bulletProducer.getBulletList().remove(i);
-                           player.addScore(currentEnemy.takeBulletDamage(currentBullet));
-                           bulletsCount--;
-                           i--;
+                           if(i >= 0)  {
+                               bulletProducer.getBulletList().remove(i);
+                               player.addScore(currentEnemy.takeBulletDamage(currentBullet));
+                               fxProducer.addFX(new FXAnimation(currentBullet.getHitAnimation(), currentBullet.getX(),currentBullet.getY(), currentBullet.bulletHitAnimationSize));
+                               bulletsCount--;
+                               i--;
+                           }
+
                        }
                    }
                    break;
@@ -150,6 +175,8 @@ public class MainScreen implements Screen {
                    if (currentBullet.isIntersects(player.getCollisionRect())){
                        player.takeBulletDamage(currentBullet);
                        bulletProducer.getBulletList().remove(i);
+                       fxProducer.addFX(new FXAnimation(currentBullet.getHitAnimation(), currentBullet.getX() - 2,currentBullet.getY() - 2, 4));
+
                        bulletsCount--;
                        i--;
                    }
@@ -165,15 +192,15 @@ public class MainScreen implements Screen {
     @Override
     public void render(float delta) {
         this.update(delta);
-
         spriteBatch.begin();
-
+        stateTime += delta;
         // прокрутка фона
         renderBackground(delta);
         itemProducer.render(spriteBatch);
         bulletProducer.render(spriteBatch);
         enemyProducer.render(spriteBatch);
         player.render(spriteBatch);
+        fxProducer.render(spriteBatch);
 
         renderGUI(spriteBatch);
 
@@ -182,6 +209,7 @@ public class MainScreen implements Screen {
     }
 
     private void renderGUI(SpriteBatch batch){
+        ammo.setText(String.valueOf(player.getAmmo()));
         health.setText(String.valueOf(player.getHp()));
         score.setText(String.valueOf(player.getScore()));
     }

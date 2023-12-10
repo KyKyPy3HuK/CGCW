@@ -4,26 +4,37 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 public class ActorStats {
-
-    float speedAclr;
-    int moveRange;
+    // main parameters
+    public float acceleration;
+    public float maxSpeed;
+    public int moveRange;
+    public int ammo;
     public int hp;
     public int hpRegen;
-    public int bulletDmg;
-    public int meleeDmg;
-    public Vector2 bulletSpd;
     public Vector2 speed;
     public int team;
 
-    public ActorStats(){
-        hp = 0;
-        hpRegen = 0;
-        bulletDmg = 0;
-        meleeDmg = 0;
-        bulletSpd = new Vector2(0,0);
-        team = 0;
-        speed = new Vector2(0,0);
-        moveRange = 0;
-        speedAclr = 0;
+    // shooting and damage
+    public float bulletSize;
+    public int bulletDmg;
+    public int shootingRate;
+    public int meleeDmg;
+    public Vector2 bulletSpd;
+
+    public ActorStats() {
+        this.acceleration = 0;
+        this.moveRange = 0;
+        this.ammo = 0;
+        this.hp = 0;
+        this.hpRegen = 0;
+        this.speed = new Vector2(0,0);
+        this.maxSpeed = 0;
+        this.team = 0;
+        this.bulletSize = 0;
+        this.bulletDmg = 0;
+        this.shootingRate = 0;
+        this.meleeDmg = 0;
+        this.bulletSpd = new Vector2(0,0);
     }
+
 }

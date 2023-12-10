@@ -1,16 +1,17 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.interfaces.ISpawnable;
 
 abstract public class Enemy extends Actor implements ISpawnable {
-
     int hpRegen;
     public int hitScore;
     public int colliseScore;
     public int killScore;
-
     float moveRange;
     public Enemy(ActorStats stats){
         this.hp = stats.hp;
@@ -25,6 +26,8 @@ abstract public class Enemy extends Actor implements ISpawnable {
     public Enemy(){
         super.playerTeam = GameParams.ENEMY_TEAM;
     }
+
+
     @Override
     public void update(float deltaTime){
         super.update(deltaTime);
