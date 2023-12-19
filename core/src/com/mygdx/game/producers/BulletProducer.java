@@ -47,4 +47,7 @@ public class BulletProducer implements IRenderable, IUpdatable {
             bulletList.get(i).update(deltaTime);
         }
     }
+    public void dispose(){
+        bulletList.removeAll(bulletList);
+    }
 }

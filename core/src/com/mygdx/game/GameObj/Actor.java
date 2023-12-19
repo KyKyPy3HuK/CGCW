@@ -1,5 +1,6 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
@@ -16,6 +17,17 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     public int bulletSpread;
     int hp;
     float acceleration;
+
+
+    Sound shootSound;
+    Sound hurtSound;
+    Sound dieSound;
+    Sound meleeHurtSound;
+    Sound dieMeleeSound;
+
+    public Sound getShootSound(){return  this.shootSound;}
+    public Sound getHurtSound(){return this.hurtSound;}
+    public Sound getDieSound(){return this.dieSound;}
     public int getHp(){
         return this.hp;
     }
@@ -24,7 +36,7 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     }
     @Override
     public int takeBulletDamage(Bullet bullet) {
-
+        this.hurtSound.play();
         this.hp -= bullet.damage;
         return bullet.damage;
     }

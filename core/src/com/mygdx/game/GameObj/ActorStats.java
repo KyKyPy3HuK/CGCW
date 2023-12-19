@@ -8,6 +8,7 @@ public class ActorStats {
     public float acceleration;
     public float maxSpeed;
     public int moveRange;
+
     public int ammo;
     public int hp;
     public int hpRegen;

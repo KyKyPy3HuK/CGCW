@@ -1,5 +1,6 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -21,8 +22,9 @@ public class MedKit extends Item{
         this.collisionOffsetX = 0;
         this.collisionOffsetY = 0;
         this.collisionRect = new Rectangle(x,y,collisionWidth,collisionHeight);
+        this.pickupSound = Gdx.audio.newSound(Gdx.files.internal("sounds/med.wav"));
+        this.soundVolume = 0.75f;
     }
-
     @Override
     public void render(SpriteBatch batch) {
         batch.draw(texture,x,y,textureWidth,textureHeight);

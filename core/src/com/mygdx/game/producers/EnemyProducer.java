@@ -32,6 +32,7 @@ public class EnemyProducer implements IRenderable, IUpdatable {
                 enemyList.add(new EnemyRifleman(
                         rnd.nextInt(0,GameParams.WORLD_WIDTH-GameParams.ACTOR_SIZE),
                         GameParams.WORLD_HEIGHT,
+                        rnd.nextFloat(GameParams.RIFLEMAN_MIN_MOVE_RANGE,GameParams.RIFLEMAN_MAX_MOVE_RANGE),
                         new Vector2(0, - (rnd.nextInt(10,20)))));
                 break;
             }
@@ -53,5 +54,8 @@ public class EnemyProducer implements IRenderable, IUpdatable {
                 i--;
             }
         }
+    }
+    public void dispose(){
+        enemyList.removeAll(enemyList);
     }
 }

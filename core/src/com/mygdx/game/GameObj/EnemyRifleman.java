@@ -1,5 +1,6 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +12,7 @@ public class EnemyRifleman extends Enemy implements IShootable {
     boolean doubleShot;
     float timeSinceLastShoot;
     float reloadTime;
-    public EnemyRifleman(float x, float y, Vector2 speed){
+    public EnemyRifleman(float x, float y, float moveRange, Vector2 speed){
         super();
         this.hp = 100;
         this.meleeDmg = 10;
@@ -28,16 +29,23 @@ public class EnemyRifleman extends Enemy implements IShootable {
         this.colliseScore = GameParams.RIFLEMAN_HIT_SCORE * 3;
         this.x = x;
         this.y = y;
+        super.spawnPosX = x;
+        super.moveRange = moveRange;
+        this.maxSpeed = GameParams.RIFLEMAN_MAX_SPEED;
+        this.acceleration = GameParams.RIFLEMAN_ACCELERATION;
+        this.speed.x = rnd.nextFloat(-maxSpeed, maxSpeed);
         this.bulletSpd = new Vector2(0,-20);
         this.collisionRect.x = this.x;
         this.collisionRect.y = this.y;
         this.collisionRect.height = collisionHeight;
         this.collisionRect.width = collisionWidth;
         this.doubleShot = false;
-        this.timeSinceLastShoot = 0;
-        this.reloadTime = 1f;
+        this.reloadTime = 2f;
+        this.timeSinceLastShoot = rnd.nextFloat(-0f, reloadTime);
         this.bulletSpread = 3;
         this.bulletSize = 1;
+        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hurt.wav"));
+
     }
     @Override
     public void shoot(){
@@ -52,6 +60,7 @@ public class EnemyRifleman extends Enemy implements IShootable {
                 doubleShot = true;
             }
             timeSinceLastShoot = 0;
+            this.shootSound.play();
         }
     };
     boolean isReadyToShoot(){
@@ -76,6 +85,7 @@ public class EnemyRifleman extends Enemy implements IShootable {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
         this.timeSinceLastShoot += deltaTime;
         shoot();
     }

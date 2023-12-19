@@ -1,5 +1,6 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,8 +10,8 @@ public class SpeedBonus extends Item{
     public SpeedBonus(float x, float y, Vector2 speed){
         this.texture = new Texture("speedBonus.png");
         this.bonusStats = new ActorStats();
-        this.bonusStats.acceleration = 0.5f;
-        this.bonusStats.maxSpeed = 0.2f;
+        this.bonusStats.acceleration = 0.3f;
+        this.bonusStats.maxSpeed = 0.8f;
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -21,6 +22,8 @@ public class SpeedBonus extends Item{
         this.collisionOffsetX = 0;
         this.collisionOffsetY = 0;
         this.collisionRect = new Rectangle(x,y,collisionWidth,collisionHeight);
+        this.pickupSound = Gdx.audio.newSound(Gdx.files.internal("sounds/powerup.wav"));
+        this.soundVolume = 0.4f;
     }
 
     @Override

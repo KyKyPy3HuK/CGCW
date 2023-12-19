@@ -1,5 +1,6 @@
 package com.mygdx.game.GameObj;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,11 @@ abstract public class Enemy extends Actor implements ISpawnable {
     public int colliseScore;
     public int killScore;
     float moveRange;
+    float acceleration = 0.5f;
+    float maxSpeed = 10f;
+    float spawnPosX;
+    boolean isMovingRight = false;
+
     public Enemy(ActorStats stats){
         this.hp = stats.hp;
         this.speed = stats.speed;
@@ -25,6 +31,10 @@ abstract public class Enemy extends Actor implements ISpawnable {
     }
     public Enemy(){
         super.playerTeam = GameParams.ENEMY_TEAM;
+        this.hurtSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hitSmall.wav"));
+        this.dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/blow.wav"));
+        this.meleeHurtSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hitMelee.wav"));
+        this.dieMeleeSound = Gdx.audio.newSound(Gdx.files.internal("sounds/meleeDie.wav"));
     }
 
 
@@ -34,6 +44,28 @@ abstract public class Enemy extends Actor implements ISpawnable {
         if (this.y < 0){
             this.hp = -100;
         }
+        if (isMovingRight){
+            this.speed.x += acceleration;
+        }
+        else {
+            this.speed.x -= acceleration;
+
+        }
+
+        if (this.x > this.moveRange + this.spawnPosX || this.x > GameParams.WORLD_WIDTH - collisionWidth){
+            isMovingRight = false;
+            speed.x -=  acceleration;
+        }
+        else if(this.x < spawnPosX - moveRange || this.x < 0){
+            isMovingRight = true;
+            speed.x += acceleration;
+        }
+        if (this.speed.x > maxSpeed){
+            this.speed.x = maxSpeed;
+        } else if (this.speed.x < -maxSpeed) {
+            this.speed.x = -maxSpeed;
+        }
+
     }
     @Override
     public void render(SpriteBatch batch) {
@@ -44,16 +76,20 @@ abstract public class Enemy extends Actor implements ISpawnable {
     public int takeBulletDamage(Bullet bullet) {
         this.hp -= bullet.damage;
         if (this.hp <= 0){
+            dieSound.play(0.2f);
             return this.killScore + this.hitScore;
         }
+        hurtSound.play(0.7f);
         return this.hitScore;
     }
     @Override
     public int takeMeleeDamage(Actor actor) {
         this.hp -= actor.meleeDmg;
         if (this.hp <= 0){
+            dieMeleeSound.play();
             return this.killScore + this.colliseScore;
         }
+        meleeHurtSound.play(0.7f);
         return this.colliseScore;
     }
 }

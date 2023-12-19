@@ -35,4 +35,7 @@ public class FXProducer implements IRenderable, IUpdatable {
             }
         }
     }
+    public void dispose(){
+        FXList.removeAll(FXList);
+    }
 }

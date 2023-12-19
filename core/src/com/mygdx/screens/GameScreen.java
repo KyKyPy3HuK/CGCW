@@ -1,6 +1,10 @@
 package com.mygdx.screens;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,12 +17,15 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameObj.*;
 import com.mygdx.game.GameParams;
+import com.mygdx.game.TestGame;
 import com.mygdx.game.producers.BulletProducer;
 import com.mygdx.game.producers.EnemyProducer;
 import com.mygdx.game.producers.FXProducer;
 import com.mygdx.game.producers.ItemProducer;
 
 public class GameScreen implements Screen {
+    TestGame game;
+    Music music;
     float stateTime;
     //Screen
     private Camera camera;
@@ -39,7 +46,7 @@ public class GameScreen implements Screen {
     private final int WORLD_HEIGHT = GameParams.WORLD_HEIGHT;
     private final int WORLD_WIDTH = GameParams.WORLD_WIDTH;
 
-    //Game objects & prodicers
+    //Game objects & producers
     private Player player;
     public static BulletProducer bulletProducer = new BulletProducer();
     public static EnemyProducer enemyProducer = new EnemyProducer();
@@ -47,13 +54,16 @@ public class GameScreen implements Screen {
     public static FXProducer fxProducer = new FXProducer();
 
     // constructors
-    public GameScreen(){
+    public GameScreen(TestGame game){
 
+        this.game = game;
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/game.mp3"));
+        music.setLooping(true);
         stateTime = 0;
 
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
-        spriteBatch = new SpriteBatch();
+        spriteBatch = game.batch;
         stage = new Stage(viewport,spriteBatch);
 
         com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
@@ -84,9 +94,10 @@ public class GameScreen implements Screen {
         bgMaxSpeed = (float)(WORLD_HEIGHT) / 4;
 
         player = new Player(20, 20, new Vector2(2.0F,2.0f));
-        enemyProducer.addEnemy(new EnemyRifleman(35,50, new Vector2(0,-10)));
+        enemyProducer.addEnemy(new EnemyRifleman(35,50,10, new Vector2(0,-10)));
         itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
-        itemProducer.addItem(new AmmoBonus(10,100,new Vector2(0,-10)));
+        itemProducer.addItem(new AmmoBonus(10,100,new Vector2(0,-20)));
+        itemProducer.addItem(new SpeedBonus(30,100,new Vector2(0,-10)));
 
     }
 
@@ -94,7 +105,8 @@ public class GameScreen implements Screen {
     // methods
     @Override
     public void show() {
-
+        music.play();
+        music.setVolume(0.4f);
     }
 
     public void  update(float deltaTime){
@@ -105,6 +117,10 @@ public class GameScreen implements Screen {
         bulletProducer.update(deltaTime);
         itemProducer.update(deltaTime);
         fxProducer.update(deltaTime);
+        if (player.getHp() <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            game.setScreen(new EndGameScreen(game,player.getScore()));
+            this.dispose();
+        }
         if (enemyProducer.getEnemyList().isEmpty()){
             enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
             enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
@@ -119,7 +135,8 @@ public class GameScreen implements Screen {
         if (itemProducer.getItemsCount() == 0){
             itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
             itemProducer.addItem(new AmmoBonus(15,100,new Vector2(0,-15)));
-            itemProducer.addItem(new ReloadBonus(15,100,new Vector2(0,-15)));
+            itemProducer.addItem(new ReloadBonus(15,100,new Vector2(0,-20)));
+            itemProducer.addItem(new SpeedBonus(30,100,new Vector2(0,-10)));
         }
     }
     public void detectCollisions(){
@@ -191,6 +208,7 @@ public class GameScreen implements Screen {
     }
     @Override
     public void render(float delta) {
+
         this.update(delta);
         spriteBatch.begin();
         stateTime += delta;
@@ -253,6 +271,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        music.stop();
+        music.dispose();
+        bulletProducer.dispose();
+        enemyProducer.dispose();
+        itemProducer.dispose();
+        fxProducer.dispose();
     }
 }

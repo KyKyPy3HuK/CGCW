@@ -52,4 +52,8 @@ public class ItemProducer implements IRenderable, IUpdatable {
         }
 
     }
+
+    public void dispose(){
+        itemList.removeAll(itemList);
+    }
 }
