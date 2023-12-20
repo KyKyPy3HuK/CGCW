@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class EnemyProducer implements IRenderable, IUpdatable {
-    Random rnd = new Random(15);
+    Random rnd = new Random(System.currentTimeMillis());
     private LinkedList<Enemy> enemyList ;
 
     public LinkedList<Enemy> getEnemyList(){
@@ -26,14 +26,14 @@ public class EnemyProducer implements IRenderable, IUpdatable {
     public void addEnemy(Enemy enemy){
         enemyList.add(enemy);
     }
-    public void addEnemyRandom(int enemyType){
+    public void addEnemyRandom(int enemyType, int difficulty){
         switch (enemyType){
             case (GameParams.RIFLEMAN):{
                 enemyList.add(new EnemyRifleman(
                         rnd.nextInt(0,GameParams.WORLD_WIDTH-GameParams.ACTOR_SIZE),
                         GameParams.WORLD_HEIGHT,
                         rnd.nextFloat(GameParams.RIFLEMAN_MIN_MOVE_RANGE,GameParams.RIFLEMAN_MAX_MOVE_RANGE),
-                        new Vector2(0, - (rnd.nextInt(10,20)))));
+                        new Vector2(0, - (rnd.nextInt(10,20))), difficulty));
                 break;
             }
         }

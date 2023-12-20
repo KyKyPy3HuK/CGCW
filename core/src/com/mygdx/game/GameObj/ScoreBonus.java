@@ -6,12 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class SpeedBonus extends Item{
-    public SpeedBonus(float x, float y, Vector2 speed){
-        this.texture = new Texture("speedBonus.png");
+public class ScoreBonus extends Item{
+    public ScoreBonus(float x, float y, Vector2 speed){
+        this.texture = new Texture("diamond.png");
         this.bonusStats = new ActorStats();
-        this.bonusStats.acceleration = 0.2f;
-        this.bonusStats.maxSpeed = 0.3f;
+        this.bonusStats.score = 100;
         this.x = x;
         this.y = y;
         this.speed = speed;

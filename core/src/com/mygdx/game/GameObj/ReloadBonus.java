@@ -9,7 +9,7 @@ public class ReloadBonus extends Item{
     public ReloadBonus(float x, float y, Vector2 speed){
         this.texture = new Texture("reloadBonus.png");
         this.bonusStats = new ActorStats();
-        this.bonusStats.shootingRate = 100;
+        this.bonusStats.shootingRate = 60;
         this.x = x;
         this.y = y;
         this.speed = speed;

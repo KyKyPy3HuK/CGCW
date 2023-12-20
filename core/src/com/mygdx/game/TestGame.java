@@ -8,9 +8,10 @@ import com.mygdx.screens.MenuScreen;
 
 public class TestGame extends Game {
 	public SpriteBatch batch;
-
+	public  int difficulty;
 	@Override
 	public void create () {
+		difficulty = 0;
 		batch = new SpriteBatch();
 		//this.setScreen(new GameScreen(this));
 		this.setScreen(new MenuScreen(this));

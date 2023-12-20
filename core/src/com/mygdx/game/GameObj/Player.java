@@ -38,7 +38,7 @@ public class Player extends Actor implements IShootable {
     public Player(int x, int y, Vector2 speed){
         this.hp = 100;
         this.score = 0;
-        this.ammo = 333;
+        this.ammo = 200;
         this.acceleration = 1.f;
         this.x = x;
         this.y = y;
@@ -50,8 +50,8 @@ public class Player extends Actor implements IShootable {
         this.meleeDmg = 40;
         this.bulletSpread = 1;
         this.shootsPerMinute = 600;
-        this.addAmmoTime = 60f / 150f;
         this.reloadTime = 60 / shootsPerMinute;
+        this.addAmmoTime = reloadTime * 3;
         this.bulletSize = 1;
         super.playerTeam = GameParams.PLAYER_TEAM;
         super.textureHeight = GameParams.ACTOR_SIZE;
@@ -106,7 +106,7 @@ public class Player extends Actor implements IShootable {
         return (timeSinceLastShoot - reloadTime >= 0) && ammo > 0;
     }
     boolean isReadyToAddAmmo(){
-        return (timeSinceLastAddAmmo - addAmmoTime >= 0)  && ammo < 200;
+        return timeSinceLastAddAmmo - addAmmoTime >= 0;
     }
     public void addAmmo(){
         if (isReadyToAddAmmo()){
@@ -210,13 +210,17 @@ public class Player extends Actor implements IShootable {
         }
     }
 
-    public void takeBonus(Item item){
+    public void takeBonus(Item item, int difficulty){
         item.playPickupSound();
+        this.score += item.bonusStats.score * difficulty;
         this.hp += item.bonusStats.hp;
         this.ammo += item.bonusStats.ammo;
+        this.bulletDmg += item.bonusStats.bulletDmg;
+        this.meleeDmg += item.bonusStats.meleeDmg;
         this.acceleration += item.bonusStats.acceleration;
         this.playerMaxSpeed += item.bonusStats.maxSpeed;
         this.shootsPerMinute += item.bonusStats.shootingRate;
         this.reloadTime = 60 / this.shootsPerMinute;
+        this.addAmmoTime = this.reloadTime * 3;
     }
 }

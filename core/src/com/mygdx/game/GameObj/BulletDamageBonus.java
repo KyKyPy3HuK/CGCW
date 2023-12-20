@@ -6,12 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class SpeedBonus extends Item{
-    public SpeedBonus(float x, float y, Vector2 speed){
-        this.texture = new Texture("speedBonus.png");
+public class BulletDamageBonus extends Item{
+    public BulletDamageBonus(float x, float y, Vector2 speed){
+        this.texture = new Texture("damageBonus.png");
         this.bonusStats = new ActorStats();
-        this.bonusStats.acceleration = 0.2f;
-        this.bonusStats.maxSpeed = 0.3f;
+        this.bonusStats.bulletDmg = 3;
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -22,7 +21,7 @@ public class SpeedBonus extends Item{
         this.collisionOffsetX = 0;
         this.collisionOffsetY = 0;
         this.collisionRect = new Rectangle(x,y,collisionWidth,collisionHeight);
-        this.pickupSound = Gdx.audio.newSound(Gdx.files.internal("sounds/powerup.wav"));
+        this.pickupSound = Gdx.audio.newSound(Gdx.files.internal("sounds/ammoPickup.wav"));
         this.soundVolume = 0.4f;
     }
 

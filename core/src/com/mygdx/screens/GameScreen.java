@@ -23,8 +23,18 @@ import com.mygdx.game.producers.EnemyProducer;
 import com.mygdx.game.producers.FXProducer;
 import com.mygdx.game.producers.ItemProducer;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Random;
+
 public class GameScreen implements Screen {
     TestGame game;
+    static Random rnd;
+    int gameMode;
+    float difficultyTimeCounter;
+    float difficultyTick;
+    static int difficultyCounter;
+    float lastEnemySpawnTime;
     Music music;
     float stateTime;
     //Screen
@@ -53,8 +63,39 @@ public class GameScreen implements Screen {
     public static ItemProducer itemProducer = new ItemProducer();
     public static FXProducer fxProducer = new FXProducer();
 
+
     // constructors
-    public GameScreen(TestGame game){
+    public GameScreen(TestGame game, int difficulty, int gameMode){
+        rnd = new Random(System.currentTimeMillis());
+
+        switch (difficulty){
+            case (GameParams.DIFFICULTY_EASY):{
+                difficultyTick = GameParams.EASY_GAME_TICK;
+                difficultyCounter = GameParams.DIFFICULTY_EASY_DEFAULT_COUNTER;
+                game.difficulty = GameParams.DIFFICULTY_EASY;
+                break;
+            }
+            case (GameParams.DIFFICULTY_MEDIUM):{
+                difficultyTick = GameParams.MEDIUM_GAME_TICK;
+                difficultyCounter = GameParams.DIFFICULTY_MEDIUM_DEFAULT_COUNTER;
+                game.difficulty = GameParams.DIFFICULTY_MEDIUM;
+                break;
+            }
+            case (GameParams.DIFFICULTY_HARD):{
+                difficultyTick = GameParams.HARD_GAME_TICK;
+                difficultyCounter = GameParams.DIFFICULTY_HARD_DEFAULT_COUNTER;
+                game.difficulty = GameParams.DIFFICULTY_HARD;
+                break;
+            }
+            default:{
+                difficultyTick = GameParams.MEDIUM_GAME_TICK;
+                difficultyCounter = GameParams.DIFFICULTY_EASY_DEFAULT_COUNTER;
+                break;
+            }
+        }
+        difficultyTimeCounter = 0f;
+        this.gameMode = gameMode;
+        this.lastEnemySpawnTime = 0f;
 
         this.game = game;
         music = Gdx.audio.newMusic(Gdx.files.internal("music/game.mp3"));
@@ -94,14 +135,72 @@ public class GameScreen implements Screen {
         bgMaxSpeed = (float)(WORLD_HEIGHT) / 4;
 
         player = new Player(20, 20, new Vector2(2.0F,2.0f));
-        enemyProducer.addEnemy(new EnemyRifleman(35,50,10, new Vector2(0,-10)));
-        itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
-        itemProducer.addItem(new AmmoBonus(10,100,new Vector2(0,-20)));
-        itemProducer.addItem(new SpeedBonus(30,100,new Vector2(0,-10)));
-
     }
 
+    public void difficultyUp(float deltaTime){
+        difficultyTimeCounter += deltaTime;
+        if (difficultyTimeCounter > difficultyTick){
+            difficultyTimeCounter = 0;
+            difficultyCounter++;
+        }
+    }
+    public void  enemySpawn(float deltaTime){
+        lastEnemySpawnTime +=deltaTime;
+        switch (gameMode){
+            case (GameParams.GAME_MODE_SURVIVAL):{
+                    if(lastEnemySpawnTime > 1.5f * (Math.E - Math.log10(difficultyCounter * 2))){
+                        player.addScore(difficultyCounter);
+                        enemyProducer.addEnemyRandom(GameParams.RIFLEMAN,difficultyCounter);
+                        lastEnemySpawnTime = 0f;
+                    }
+                break;
+            }
+            case (GameParams.GAME_MODE_WAVES):{
 
+            }
+            default:{
+                break;
+            }
+        }
+    }
+    public static void spawnBonus(float x, float y, float speedY){
+        float spawnChance = rnd.nextFloat(0,(float)Math.E);
+        if(spawnChance + Math.log10(difficultyCounter * 2)< Math.E ){
+            int arrSize = itemProducer.spawnArray.size();
+            int spawnValue = rnd.nextInt(0,arrSize);
+            int itemID = itemProducer.spawnArray.get(spawnValue);
+            switch (itemID){
+                case (GameParams.MED_BONUS):{
+                    itemProducer.addItem(new MedKit(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+                case (GameParams.AMMO_BONUS):{
+                    itemProducer.addItem(new AmmoBonus(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+                case (GameParams.RELOAD_BONUS):{
+                    itemProducer.addItem(new ReloadBonus(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+                case (GameParams.SPEED_BONUS):{
+                    itemProducer.addItem(new SpeedBonus(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+                case (GameParams.BULLET_DAMAGE_BONUS):{
+                    itemProducer.addItem(new BulletDamageBonus(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+                case (GameParams.MELEE_DAMAGE_BONUS):{
+                    itemProducer.addItem(new MeleeDamageBonus(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+                case (GameParams.SCORE_BONUS):{
+                    itemProducer.addItem(new ScoreBonus(x,y,new Vector2(0f,speedY)));
+                    break;
+                }
+            }
+        }
+    }
     // methods
     @Override
     public void show() {
@@ -110,6 +209,7 @@ public class GameScreen implements Screen {
     }
 
     public void  update(float deltaTime){
+        difficultyUp(deltaTime);
         stage.act();
         detectCollisions();
         player.update(deltaTime);
@@ -117,26 +217,10 @@ public class GameScreen implements Screen {
         bulletProducer.update(deltaTime);
         itemProducer.update(deltaTime);
         fxProducer.update(deltaTime);
+        enemySpawn(deltaTime);
         if (player.getHp() <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             game.setScreen(new EndGameScreen(game,player.getScore()));
             this.dispose();
-        }
-        if (enemyProducer.getEnemyList().isEmpty()){
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-            enemyProducer.addEnemyRandom(GameParams.RIFLEMAN);
-        }
-        if (itemProducer.getItemsCount() == 0){
-            itemProducer.addItem(new MedKit(10,100,new Vector2(0,-10)));
-            itemProducer.addItem(new AmmoBonus(15,100,new Vector2(0,-15)));
-            itemProducer.addItem(new ReloadBonus(15,100,new Vector2(0,-20)));
-            itemProducer.addItem(new SpeedBonus(30,100,new Vector2(0,-10)));
         }
     }
     public void detectCollisions(){
@@ -151,7 +235,7 @@ public class GameScreen implements Screen {
         for (int i = 0; i < itemProducer.getItemsCount(); i++){
             currentItem = itemProducer.getItem(i);
             if (player.isIntersects(currentItem.getCollisionRect())){
-                player.takeBonus(currentItem);
+                player.takeBonus(currentItem, difficultyCounter);
                 itemProducer.removeItem(i);
                 i--;
             }

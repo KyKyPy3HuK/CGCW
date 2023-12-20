@@ -12,9 +12,9 @@ public class EnemyRifleman extends Enemy implements IShootable {
     boolean doubleShot;
     float timeSinceLastShoot;
     float reloadTime;
-    public EnemyRifleman(float x, float y, float moveRange, Vector2 speed){
+    public EnemyRifleman(float x, float y, float moveRange, Vector2 speed, int difficulty){
         super();
-        this.hp = 100;
+        this.hp = 60 + difficulty;
         this.meleeDmg = 10;
         this.bulletDmg = 10;
         this.texture = new Texture("enemyRifleman.png");
@@ -40,7 +40,7 @@ public class EnemyRifleman extends Enemy implements IShootable {
         this.collisionRect.height = collisionHeight;
         this.collisionRect.width = collisionWidth;
         this.doubleShot = false;
-        this.reloadTime = 2f;
+        this.reloadTime = 1f;
         this.timeSinceLastShoot = rnd.nextFloat(-0f, reloadTime);
         this.bulletSpread = 3;
         this.bulletSize = 1;

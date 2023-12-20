@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ActorStats {
     // main parameters
+    public int score;
     public float acceleration;
     public float maxSpeed;
     public int moveRange;
@@ -23,6 +24,7 @@ public class ActorStats {
     public Vector2 bulletSpd;
 
     public ActorStats() {
+        this.score = 0;
         this.acceleration = 0;
         this.moveRange = 0;
         this.ammo = 0;

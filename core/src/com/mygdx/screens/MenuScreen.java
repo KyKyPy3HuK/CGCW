@@ -86,7 +86,7 @@ public class MenuScreen implements Screen {
         batch.draw(bgTexture,0,0, WORLD_WIDTH,WORLD_HEIGHT);
         batch.end();
         if (playBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            testGame.setScreen(new GameScreen(testGame));
+            testGame.setScreen(new GameScreen(testGame, GameParams.DIFFICULTY_HARD, GameParams.GAME_MODE_SURVIVAL));
         } else if (exitBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
             System.exit(-1);
