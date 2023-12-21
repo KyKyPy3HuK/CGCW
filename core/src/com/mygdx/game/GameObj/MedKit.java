@@ -25,8 +25,5 @@ public class MedKit extends Item{
         this.pickupSound = Gdx.audio.newSound(Gdx.files.internal("sounds/med.wav"));
         this.soundVolume = 0.75f;
     }
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(texture,x,y,textureWidth,textureHeight);
-    }
+
 }

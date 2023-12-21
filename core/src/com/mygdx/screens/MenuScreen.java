@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -28,8 +29,8 @@ public class MenuScreen implements Screen {
     int col_width = Gdx.graphics.getWidth() / 12;
     private final int WORLD_HEIGHT = 1000;
     private final int WORLD_WIDTH = 700;
-    private final float STAGE_SCALE = 1.4f;
-    private final float BTNS_OFFSET_X = 80;
+    private final float STAGE_SCALE = 0.7f;
+    private final float BTNS_OFFSET_X = 160;
     private final float BTNS_OFFSET_Y = 55;
 
     TextButton playBtn;
@@ -54,7 +55,7 @@ public class MenuScreen implements Screen {
 
         music.play();
         music.setPosition(2.5f);
-        Skin skin = new Skin(Gdx.files.internal("Skins/btn.json"));
+        Skin skin = new Skin(Gdx.files.internal("Skins/buts.json"));
 
         optionsBtn = new TextButton("Options", skin);
         exitBtn = new TextButton("Exit",skin);
@@ -86,7 +87,7 @@ public class MenuScreen implements Screen {
         batch.draw(bgTexture,0,0, WORLD_WIDTH,WORLD_HEIGHT);
         batch.end();
         if (playBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            testGame.setScreen(new GameScreen(testGame, GameParams.DIFFICULTY_HARD, GameParams.GAME_MODE_SURVIVAL));
+            testGame.setScreen(new GameScreen(testGame, GameParams.DIFFICULTY_EASY, GameParams.GAME_MODE_SURVIVAL));
         } else if (exitBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
             System.exit(-1);

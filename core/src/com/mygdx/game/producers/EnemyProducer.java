@@ -33,7 +33,7 @@ public class EnemyProducer implements IRenderable, IUpdatable {
                         rnd.nextInt(0,GameParams.WORLD_WIDTH-GameParams.ACTOR_SIZE),
                         GameParams.WORLD_HEIGHT,
                         rnd.nextFloat(GameParams.RIFLEMAN_MIN_MOVE_RANGE,GameParams.RIFLEMAN_MAX_MOVE_RANGE),
-                        new Vector2(0, - (rnd.nextInt(10,20))), difficulty));
+                        new Vector2(0, - (rnd.nextInt(5,10))), difficulty));
                 break;
             }
         }

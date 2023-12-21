@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameObj.*;
@@ -33,7 +34,7 @@ public class GameScreen implements Screen {
     int gameMode;
     float difficultyTimeCounter;
     float difficultyTick;
-    static int difficultyCounter;
+    public static int difficultyCounter;
     float lastEnemySpawnTime;
     Music music;
     float stateTime;
@@ -55,6 +56,7 @@ public class GameScreen implements Screen {
     //World
     private final int WORLD_HEIGHT = GameParams.WORLD_HEIGHT;
     private final int WORLD_WIDTH = GameParams.WORLD_WIDTH;
+    final float FONT_SCALE = 0.15f;
 
     //Game objects & producers
     private Player player;
@@ -108,24 +110,22 @@ public class GameScreen implements Screen {
         stage = new Stage(viewport,spriteBatch);
 
         com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
-        BitmapFont font = new BitmapFont();
-        labelStyle.font = font;
-        labelStyle.fontColor = Color.SKY;
+        Skin skin = new Skin(Gdx.files.internal("Skins/buts.json"));
+        skin.setScale(0.5f);
+        score = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", skin);
 
-
-        score = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
-        score.setFontScale(0.2f);
-        score.setPosition(2,5);
+        score.setFontScale(0.5f);
+        score.setPosition(0.5f,-7f);
         stage.addActor(score);
 
-        ammo = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
-        ammo.setFontScale(0.2f);
-        ammo.setPosition(2,10);
+        ammo = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", skin);
+        ammo.setFontScale(0.5f);
+        ammo.setPosition(0.5f,-11f);
         stage.addActor(ammo);
 
-        health = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", labelStyle);
-        health.setFontScale(0.2f);
-        health.setPosition(2,0);
+        health = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", skin);
+        health.setFontScale(0.5f);
+        health.setPosition(0.5f,-15f);
         stage.addActor(health);
 
         backgrounds = new Texture[3];
@@ -164,8 +164,7 @@ public class GameScreen implements Screen {
         }
     }
     public static void spawnBonus(float x, float y, float speedY){
-        float spawnChance = rnd.nextFloat(0,(float)Math.E);
-        if(spawnChance + Math.log10(difficultyCounter * 2)< Math.E ){
+
             int arrSize = itemProducer.spawnArray.size();
             int spawnValue = rnd.nextInt(0,arrSize);
             int itemID = itemProducer.spawnArray.get(spawnValue);
@@ -198,7 +197,7 @@ public class GameScreen implements Screen {
                     itemProducer.addItem(new ScoreBonus(x,y,new Vector2(0f,speedY)));
                     break;
                 }
-            }
+
         }
     }
     // methods
@@ -307,13 +306,17 @@ public class GameScreen implements Screen {
         renderGUI(spriteBatch);
 
         spriteBatch.end();
+
         stage.draw();
     }
 
     private void renderGUI(SpriteBatch batch){
-        ammo.setText(String.valueOf(player.getAmmo()));
-        health.setText(String.valueOf(player.getHp()));
-        score.setText(String.valueOf(player.getScore()));
+        ammo.setText(String.valueOf( "ammo: " + player.getAmmo()));
+        ammo.setFontScale(FONT_SCALE);
+        health.setText(String.valueOf("health: " + player.getHp()));
+        health.setFontScale(FONT_SCALE);
+        score.setText(String.valueOf( "score:  " + player.getScore()));
+        score.setFontScale(FONT_SCALE);
     }
 
     private void renderBackground(float delta){

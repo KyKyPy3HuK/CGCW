@@ -26,8 +26,5 @@ public class SpeedBonus extends Item{
         this.soundVolume = 0.4f;
     }
 
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(texture,x,y,textureWidth,textureHeight);
-    }
+
 }

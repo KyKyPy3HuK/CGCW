@@ -12,4 +12,8 @@ abstract public class Item extends GameObject{
     public void playPickupSound(){
         this.pickupSound.play(this.soundVolume);
     }
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.draw(texture,x,y,textureWidth,textureHeight);
+    }
 }

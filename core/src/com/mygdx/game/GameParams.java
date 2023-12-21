@@ -5,11 +5,11 @@ public class GameParams {
     // Game difficulty consts
     public static final int GAME_MODE_SURVIVAL = 0;
     public static final int GAME_MODE_WAVES = 1;
-    public static final int DIFFICULTY_EASY = 0;
-    public static final int DIFFICULTY_EASY_DEFAULT_COUNTER = 0;
-    public static final int DIFFICULTY_MEDIUM = 1;
+    public static final int DIFFICULTY_EASY = 1;
+    public static final int DIFFICULTY_EASY_DEFAULT_COUNTER = 10;
+    public static final int DIFFICULTY_MEDIUM = 2;
     public static final int DIFFICULTY_MEDIUM_DEFAULT_COUNTER = 10;
-    public static final int DIFFICULTY_HARD = 2;
+    public static final int DIFFICULTY_HARD = 3;
     public static final int DIFFICULTY_HARD_DEFAULT_COUNTER = 20;
     public static final float EASY_GAME_TICK = 10f;
     public static final float MEDIUM_GAME_TICK = 5f;
@@ -19,6 +19,8 @@ public class GameParams {
     // Enemy consts
     public static final int RIFLEMAN = 0;
     public static final int KAMIKAZE = 1;
+    public static final int RANGER = 2;
+
 
 
     // Item consts
@@ -43,7 +45,7 @@ public class GameParams {
     public static final int SPEED_SPAWN_WEIGHT = 1;
     public static final int BULLET_DAMAGE_BONUS_SPAWN_WEIGHT = 1;
     public static final int MELEE_DAMAGE_BONUS_SPAWN_WEIGHT = 1;
-    public static final int SCORE_BONUS_SPAWN_WEIGHT = 5;
+    public static final int SCORE_BONUS_SPAWN_WEIGHT = 7;
 
 
     // Teams

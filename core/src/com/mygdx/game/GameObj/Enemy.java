@@ -50,7 +50,6 @@ abstract public class Enemy extends Actor implements ISpawnable {
         }
         else {
             this.speed.x -= acceleration;
-
         }
 
         if (this.x > this.moveRange + this.spawnPosX || this.x > GameParams.WORLD_WIDTH - collisionWidth){
@@ -77,7 +76,11 @@ abstract public class Enemy extends Actor implements ISpawnable {
     public int takeBulletDamage(Bullet bullet) {
         this.hp -= bullet.damage;
         if (this.hp <= 0){
-            GameScreen.spawnBonus(this.x, this.y, this.speed.y);
+            float spawnChance = rnd.nextFloat(0,(float)Math.E);
+            if(spawnChance + Math.log10(GameScreen.difficultyCounter * 2)< Math.E ){
+                GameScreen.spawnBonus(this.x, this.y, this.speed.y);
+            }
+
             dieSound.play(0.2f);
             return this.killScore + bullet.damage * this.hitScore;
         }
@@ -88,6 +91,8 @@ abstract public class Enemy extends Actor implements ISpawnable {
     public int takeMeleeDamage(Actor actor) {
         this.hp -= actor.meleeDmg;
         if (this.hp <= 0){
+            GameScreen.spawnBonus(this.x, this.y, this.speed.y);
+
             dieMeleeSound.play();
             return this.killScore + this.colliseScore * actor.meleeDmg;
         }

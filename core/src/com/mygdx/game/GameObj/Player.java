@@ -36,7 +36,7 @@ public class Player extends Actor implements IShootable {
         return this.ammo;
     }
     public Player(int x, int y, Vector2 speed){
-        this.hp = 100;
+        this.hp = 1000;
         this.score = 0;
         this.ammo = 200;
         this.acceleration = 1.f;
@@ -45,7 +45,7 @@ public class Player extends Actor implements IShootable {
         this.speed = speed;
         this.bulletTexture = new Texture("bulletSmall.png");
         this.texture = new Texture("spaceShip.png");
-        this.bulletSpd = new Vector2(0,50);
+        this.bulletSpd = new Vector2(0,100);
         this.bulletDmg = 20;
         this.meleeDmg = 40;
         this.bulletSpread = 1;
