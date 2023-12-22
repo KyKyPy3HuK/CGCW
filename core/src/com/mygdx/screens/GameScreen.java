@@ -149,7 +149,7 @@ public class GameScreen implements Screen {
         switch (gameMode){
             case (GameParams.GAME_MODE_SURVIVAL):{
                     if(lastEnemySpawnTime > 1.5f * (Math.E - Math.log10(difficultyCounter * 2))){
-                        player.addScore(difficultyCounter);
+                        player.addScore(difficultyCounter * 10 * (1 + TestGame.currentDifficulty));
                         enemyProducer.addEnemyRandom(GameParams.RIFLEMAN,difficultyCounter);
                         lastEnemySpawnTime = 0f;
                     }

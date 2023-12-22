@@ -215,7 +215,7 @@ public class Player extends Actor implements IShootable {
         item.playPickupSound();
         this.score += item.bonusStats.score * difficulty;
         this.hp += item.bonusStats.hp;
-        this.ammo += item.bonusStats.ammo;
+        this.ammo += item.bonusStats.ammo * (this.shootsPerMinute / 60);
         this.bulletDmg += item.bonusStats.bulletDmg;
         this.meleeDmg += item.bonusStats.meleeDmg;
         this.acceleration += item.bonusStats.acceleration;

@@ -10,7 +10,7 @@ public class AmmoBonus extends Item{
     public AmmoBonus(float x, float y, Vector2 speed){
         this.texture = new Texture("ammoBonus.png");
         this.bonusStats = new ActorStats();
-        this.bonusStats.ammo = 100;
+        this.bonusStats.ammo = 10;
         this.x = x;
         this.y = y;
         this.speed = new Vector2(speed);

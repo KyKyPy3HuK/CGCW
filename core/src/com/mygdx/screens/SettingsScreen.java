@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameParams;
@@ -26,6 +27,7 @@ public class SettingsScreen implements Screen {
     private final int WORLD_HEIGHT = 1000;
     private final int WORLD_WIDTH = 700;
     private final int CHECKBOX_OFFSET_Y = 50;
+    private final int CHECKBOX_OFFSET_x = 20;
     
     Skin skin;
 
@@ -41,6 +43,8 @@ public class SettingsScreen implements Screen {
     CheckBox mediumCheckBox;
     CheckBox hardCheckBox;
 
+    TextButton applyBtn;
+    TextButton cancelBtn;
     public SettingsScreen(TestGame game){
         this.testGame = game;
         camera = new OrthographicCamera();
@@ -53,7 +57,7 @@ public class SettingsScreen implements Screen {
         skin  = new Skin(Gdx.files.internal(GameParams.SKIN_STR));
 
         musicCheckbox = new CheckBox(" music", skin);
-        musicCheckbox.setPosition(0,CHECKBOX_OFFSET_Y * 10);
+        musicCheckbox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 11);
         stage.addActor(musicCheckbox);
         if (TestGame.musicVolume < 1){
             musicCheckbox.setChecked(false);
@@ -63,7 +67,7 @@ public class SettingsScreen implements Screen {
         }
 
         soundCheckBox = new CheckBox(" sounds", skin);
-        soundCheckBox.setPosition(0,CHECKBOX_OFFSET_Y * 9);
+        soundCheckBox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 10);
         stage.addActor(soundCheckBox);
         if (TestGame.soundVolume < 1){
             soundCheckBox.setChecked(false);
@@ -74,9 +78,9 @@ public class SettingsScreen implements Screen {
 
         gameModeGrp = new ButtonGroup<>();
         survivalCheckBox = new CheckBox(" survival",skin);
-        survivalCheckBox.setPosition(0,CHECKBOX_OFFSET_Y * 7);
+        survivalCheckBox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 8);
         waveCheckBox = new CheckBox(" waves",skin);
-        waveCheckBox.setPosition(0,CHECKBOX_OFFSET_Y * 6);
+        waveCheckBox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 7);
         gameModeGrp.add(survivalCheckBox);
         gameModeGrp.add(waveCheckBox);
         stage.addActor(survivalCheckBox);
@@ -98,11 +102,11 @@ public class SettingsScreen implements Screen {
 
         difficultyGrp = new ButtonGroup<>();
         easyCheckBox = new CheckBox(" easy",skin);
-        easyCheckBox.setPosition(0,CHECKBOX_OFFSET_Y * 3);
+        easyCheckBox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 5);
         mediumCheckBox = new CheckBox(" medium", skin);
-        mediumCheckBox.setPosition(0,CHECKBOX_OFFSET_Y * 2);
+        mediumCheckBox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 4);
         hardCheckBox = new CheckBox(" hard", skin);
-        hardCheckBox.setPosition(0,CHECKBOX_OFFSET_Y * 1);
+        hardCheckBox.setPosition(CHECKBOX_OFFSET_x,CHECKBOX_OFFSET_Y * 3);
         difficultyGrp.add(easyCheckBox);
         difficultyGrp.add(mediumCheckBox);
         difficultyGrp.add(hardCheckBox);
@@ -128,6 +132,14 @@ public class SettingsScreen implements Screen {
                 break;
             }
         }
+
+        applyBtn = new TextButton("Apply",skin);
+        applyBtn.setPosition(360,CHECKBOX_OFFSET_Y * 1);
+        stage.addActor(applyBtn);
+
+        cancelBtn = new TextButton("Discard",skin);
+        cancelBtn.setPosition(100,CHECKBOX_OFFSET_Y * 1);
+        stage.addActor(cancelBtn);
     }
     @Override
     public void show() {
@@ -139,7 +151,11 @@ public class SettingsScreen implements Screen {
         batch.begin();
         batch.draw(bgTexture,0,0, WORLD_WIDTH,WORLD_HEIGHT);
         batch.end();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)||applyBtn.isPressed()){
+            this.applySettings();
+            testGame.setScreen(new MenuScreen(testGame));
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)||cancelBtn.isPressed()){
             testGame.setScreen(new MenuScreen(testGame));
         }
         stage.act();
@@ -163,6 +179,9 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void hide() {
+
+    }
+    void applySettings(){
         int gameMode = gameModeGrp.getCheckedIndex();
         switch (gameMode){
             case (GameParams.GAME_MODE_SURVIVAL):{

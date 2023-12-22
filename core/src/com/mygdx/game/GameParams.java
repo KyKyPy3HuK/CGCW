@@ -12,7 +12,7 @@ public class GameParams {
     public static final int DIFFICULTY_EASY = 0;
     public static final int DIFFICULTY_EASY_DEFAULT_COUNTER = 10;
     public static final int DIFFICULTY_MEDIUM = 1;
-    public static final int DIFFICULTY_MEDIUM_DEFAULT_COUNTER = 10;
+    public static final int DIFFICULTY_MEDIUM_DEFAULT_COUNTER = 15;
     public static final int DIFFICULTY_HARD = 2;
     public static final int DIFFICULTY_HARD_DEFAULT_COUNTER = 20;
     public static final float EASY_GAME_TICK = 10f;

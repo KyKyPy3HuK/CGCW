@@ -31,8 +31,8 @@ public class MenuScreen implements Screen {
     private final int WORLD_HEIGHT = 1000;
     private final int WORLD_WIDTH = 700;
     private final float STAGE_SCALE = 0.7f;
-    private final float BTNS_OFFSET_X = 160;
-    private final float BTNS_OFFSET_Y = 55;
+    private final float BTNS_OFFSET_X = 230;
+    private final float BTNS_OFFSET_Y = 50;
 
     TextButton playBtn;
     TextButton optionsBtn;
@@ -68,20 +68,20 @@ public class MenuScreen implements Screen {
 
         playBtn = new TextButton("Play",skin);
         playBtn.setTransform(true);
-        playBtn.setSize(col_width*4,row_height);
-        playBtn.scaleBy(STAGE_SCALE);
+        //playBtn.setSize(col_width*4,row_height);
+        //playBtn.scaleBy(STAGE_SCALE);
         playBtn.setPosition(BTNS_OFFSET_X,BTNS_OFFSET_Y * 6);
         stage.addActor(playBtn);
 
         optionsBtn.setTransform(true);
-        optionsBtn.setSize(col_width*4,row_height);
-        optionsBtn.scaleBy(STAGE_SCALE);
+        //optionsBtn.setSize(col_width*4,row_height);
+        //optionsBtn.scaleBy(STAGE_SCALE);
         optionsBtn.setPosition(BTNS_OFFSET_X,BTNS_OFFSET_Y * 4);
         stage.addActor(optionsBtn);
 
         exitBtn.setTransform(true);
-        exitBtn.setSize(col_width*4,row_height);
-        exitBtn.scaleBy(STAGE_SCALE);
+        //exitBtn.setSize(col_width*4,row_height);
+       // exitBtn.scaleBy(STAGE_SCALE);
         exitBtn.setPosition(BTNS_OFFSET_X,BTNS_OFFSET_Y * 2);
         stage.addActor(exitBtn);
 

@@ -11,7 +11,7 @@ public class TestGame extends Game {
 	public Music music;
 
 	// global variables
-	public static float musicVolume = 0.5f;
+	public static float musicVolume = 0f;
 	public static float soundVolume = 0f;
 	public static int currentDifficulty = GameParams.DIFFICULTY_MEDIUM;
 	public static int currentGameMode = GameParams.GAME_MODE_SURVIVAL;
