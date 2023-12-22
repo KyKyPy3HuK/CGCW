@@ -110,7 +110,7 @@ public class GameScreen implements Screen {
         stage = new Stage(viewport,spriteBatch);
 
         com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
-        Skin skin = new Skin(Gdx.files.internal("Skins/buts.json"));
+        Skin skin = new Skin(Gdx.files.internal(GameParams.SKIN_STR));
         skin.setScale(0.5f);
         score = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", skin);
 
@@ -204,7 +204,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         music.play();
-        music.setVolume(0.4f);
+        music.setVolume(TestGame.musicVolume * 0.4f);
     }
 
     public void  update(float deltaTime){

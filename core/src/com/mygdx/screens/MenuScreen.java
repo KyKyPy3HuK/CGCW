@@ -16,9 +16,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameParams;
 import com.mygdx.game.TestGame;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 public class MenuScreen implements Screen {
-    Music music;
+    //public Music music;
     Texture bgTexture;
     TestGame testGame;
     SpriteBatch batch;
@@ -40,8 +41,6 @@ public class MenuScreen implements Screen {
     public MenuScreen(TestGame game){
 
         this.testGame = game;
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
-        music.setLooping(true);
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
         batch = testGame.batch;
@@ -52,10 +51,17 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        if (!testGame.music.isPlaying()){
+            testGame.music.play();
+            testGame.music.setVolume(TestGame.musicVolume);
+            testGame.music.setPosition(2.5f);
+        }
+        if (TestGame.musicVolume < 1f){
+            testGame.music.pause();
+        }
 
-        music.play();
-        music.setPosition(2.5f);
-        Skin skin = new Skin(Gdx.files.internal("Skins/buts.json"));
+
+        Skin skin = new Skin(Gdx.files.internal(GameParams.SKIN_STR));
 
         optionsBtn = new TextButton("Options", skin);
         exitBtn = new TextButton("Exit",skin);
@@ -87,13 +93,15 @@ public class MenuScreen implements Screen {
         batch.draw(bgTexture,0,0, WORLD_WIDTH,WORLD_HEIGHT);
         batch.end();
         if (playBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            testGame.setScreen(new GameScreen(testGame, GameParams.DIFFICULTY_EASY, GameParams.GAME_MODE_SURVIVAL));
+            testGame.music.stop();
+            testGame.setScreen(new GameScreen(testGame, TestGame.currentDifficulty, TestGame.currentGameMode));
+
         } else if (exitBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
             System.exit(-1);
         }
         else if(optionsBtn.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.O)){
-            testGame.setScreen(new EndGameScreen(testGame, 20));
+            testGame.setScreen(new SettingsScreen(testGame));
         }
 
         stage.act();
@@ -117,12 +125,10 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        music.stop();
     }
 
     @Override
     public void dispose() {
-        music.stop();
-        music.dispose();
+
     }
 }

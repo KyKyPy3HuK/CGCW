@@ -2,14 +2,18 @@ package com.mygdx.game;
 
 public class GameParams {
 
+
+    // str consts
+    public static final  String SKIN_STR = new String("Skins/buts.json");
+
     // Game difficulty consts
     public static final int GAME_MODE_SURVIVAL = 0;
     public static final int GAME_MODE_WAVES = 1;
-    public static final int DIFFICULTY_EASY = 1;
+    public static final int DIFFICULTY_EASY = 0;
     public static final int DIFFICULTY_EASY_DEFAULT_COUNTER = 10;
-    public static final int DIFFICULTY_MEDIUM = 2;
+    public static final int DIFFICULTY_MEDIUM = 1;
     public static final int DIFFICULTY_MEDIUM_DEFAULT_COUNTER = 10;
-    public static final int DIFFICULTY_HARD = 3;
+    public static final int DIFFICULTY_HARD = 2;
     public static final int DIFFICULTY_HARD_DEFAULT_COUNTER = 20;
     public static final float EASY_GAME_TICK = 10f;
     public static final float MEDIUM_GAME_TICK = 5f;
@@ -69,4 +73,6 @@ public class GameParams {
     public static final float RIFLEMAN_ACCELERATION = 0.3f;
     public static final float RIFLEMAN_MAX_MOVE_RANGE = 20f;
     public static final float RIFLEMAN_MIN_MOVE_RANGE = 5f;
+
+
 }

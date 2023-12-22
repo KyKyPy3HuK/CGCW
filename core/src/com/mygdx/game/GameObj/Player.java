@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameParams;
+import com.mygdx.game.TestGame;
 import com.mygdx.game.interfaces.IShootable;
 import com.mygdx.screens.GameScreen;
 
@@ -98,7 +99,7 @@ public class Player extends Actor implements IShootable {
                 ammo--;
                 doubleShot = true;
             }
-            this.shootSound.play(0.7f);
+            this.shootSound.play(TestGame.soundVolume * 0.7f);
             timeSinceLastShoot = 0;
         }
     }

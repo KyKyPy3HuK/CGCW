@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.GameParams;
+import com.mygdx.game.TestGame;
 import com.mygdx.game.interfaces.ISpawnable;
 import com.mygdx.screens.GameScreen;
 
@@ -81,10 +82,10 @@ abstract public class Enemy extends Actor implements ISpawnable {
                 GameScreen.spawnBonus(this.x, this.y, this.speed.y);
             }
 
-            dieSound.play(0.2f);
+            dieSound.play(TestGame.soundVolume * 0.2f);
             return this.killScore + bullet.damage * this.hitScore;
         }
-        hurtSound.play(0.7f);
+        hurtSound.play(TestGame.soundVolume * 0.7f);
         return this.hitScore * bullet.damage;
     }
     @Override
@@ -93,10 +94,10 @@ abstract public class Enemy extends Actor implements ISpawnable {
         if (this.hp <= 0){
             GameScreen.spawnBonus(this.x, this.y, this.speed.y);
 
-            dieMeleeSound.play();
+            dieMeleeSound.play(TestGame.soundVolume);
             return this.killScore + this.colliseScore * actor.meleeDmg;
         }
-        meleeHurtSound.play(0.7f);
+        meleeHurtSound.play(TestGame.soundVolume * 0.7f);
         return this.colliseScore * actor.meleeDmg;
     }
 }

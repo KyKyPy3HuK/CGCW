@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameParams;
+import com.mygdx.game.TestGame;
 import com.mygdx.game.interfaces.IShootable;
 import com.mygdx.screens.GameScreen;
 
@@ -60,7 +61,7 @@ public class EnemyRifleman extends Enemy implements IShootable {
                 doubleShot = true;
             }
             timeSinceLastShoot = 0;
-            this.shootSound.play();
+            this.shootSound.play(TestGame.soundVolume);
         }
     };
     boolean isReadyToShoot(){

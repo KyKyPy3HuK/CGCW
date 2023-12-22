@@ -4,6 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.TestGame;
 import com.mygdx.game.interfaces.IDamageable;
 import com.mygdx.game.interfaces.IMortal;
 
@@ -36,7 +37,7 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     }
     @Override
     public int takeBulletDamage(Bullet bullet) {
-        this.hurtSound.play();
+        this.hurtSound.play(TestGame.soundVolume);
         this.hp -= bullet.damage;
         return bullet.damage;
     }

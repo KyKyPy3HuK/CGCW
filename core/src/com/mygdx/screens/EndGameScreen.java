@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.GameParams;
 import com.mygdx.game.TestGame;
 
 import java.awt.*;
@@ -36,7 +37,7 @@ public class EndGameScreen implements Screen {
 
 
     public EndGameScreen(TestGame game, int score){
-        Skin skin = new Skin(Gdx.files.internal("Skins/buts.json"));
+        Skin skin = new Skin(Gdx.files.internal(GameParams.SKIN_STR));
 
         this.testGame = game;
         camera = new OrthographicCamera();
@@ -63,7 +64,7 @@ public class EndGameScreen implements Screen {
         scoreLabel.setPosition(BTNS_OFFSET_X - 55 ,BTNS_OFFSET_Y * 8);
 
         Sound loseSound = Gdx.audio.newSound(Gdx.files.internal("sounds/lose.wav"));
-        loseSound.play();
+        loseSound.play(TestGame.soundVolume);
     }
 
     @Override
