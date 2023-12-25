@@ -1,15 +1,11 @@
 package com.mygdx.screens;
-
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,8 +20,6 @@ import com.mygdx.game.producers.EnemyProducer;
 import com.mygdx.game.producers.FXProducer;
 import com.mygdx.game.producers.ItemProducer;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GameScreen implements Screen {
@@ -37,15 +31,14 @@ public class GameScreen implements Screen {
     public static int difficultyCounter;
     float lastEnemySpawnTime;
     Music music;
-    float stateTime;
     //Screen
     private Camera camera;
     private Viewport viewport;
     Stage stage;
     //Graphics
     private SpriteBatch spriteBatch;
-    private Texture bgTexture;
-    private com.badlogic.gdx.scenes.scene2d.ui.Label score,
+    private com.badlogic.gdx.scenes.scene2d.ui.Label difficultyLabel,
+                                                    score,
                                                     health,
                                                     ammo;
     //Timing
@@ -74,19 +67,19 @@ public class GameScreen implements Screen {
             case (GameParams.DIFFICULTY_EASY):{
                 difficultyTick = GameParams.EASY_GAME_TICK;
                 difficultyCounter = GameParams.DIFFICULTY_EASY_DEFAULT_COUNTER;
-                game.difficulty = GameParams.DIFFICULTY_EASY;
+
                 break;
             }
             case (GameParams.DIFFICULTY_MEDIUM):{
                 difficultyTick = GameParams.MEDIUM_GAME_TICK;
                 difficultyCounter = GameParams.DIFFICULTY_MEDIUM_DEFAULT_COUNTER;
-                game.difficulty = GameParams.DIFFICULTY_MEDIUM;
+
                 break;
             }
             case (GameParams.DIFFICULTY_HARD):{
                 difficultyTick = GameParams.HARD_GAME_TICK;
                 difficultyCounter = GameParams.DIFFICULTY_HARD_DEFAULT_COUNTER;
-                game.difficulty = GameParams.DIFFICULTY_HARD;
+
                 break;
             }
             default:{
@@ -102,16 +95,22 @@ public class GameScreen implements Screen {
         this.game = game;
         music = Gdx.audio.newMusic(Gdx.files.internal("music/game.mp3"));
         music.setLooping(true);
-        stateTime = 0;
 
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
         spriteBatch = game.batch;
         stage = new Stage(viewport,spriteBatch);
 
+
+
         com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
         Skin skin = new Skin(Gdx.files.internal(GameParams.SKIN_STR));
         skin.setScale(0.5f);
+        difficultyLabel = new com.badlogic.gdx.scenes.scene2d.ui.Label("text", skin);
+        difficultyLabel.setFontScale(0.5f);
+        difficultyLabel.setPosition(42f, -15f);
+        stage.addActor(difficultyLabel);
+
         score = new com.badlogic.gdx.scenes.scene2d.ui.Label ("text", skin);
 
         score.setFontScale(0.5f);
@@ -150,7 +149,7 @@ public class GameScreen implements Screen {
             case (GameParams.GAME_MODE_SURVIVAL):{
                     if(lastEnemySpawnTime > 1.5f * (Math.E - Math.log10(difficultyCounter * 2))){
                         player.addScore(difficultyCounter * 10 * (1 + TestGame.currentDifficulty));
-                        enemyProducer.addEnemyRandom(GameParams.RIFLEMAN,difficultyCounter);
+                        enemyProducer.addEnemyRandom(difficultyCounter);
                         lastEnemySpawnTime = 0f;
                     }
                 break;
@@ -170,7 +169,7 @@ public class GameScreen implements Screen {
             int itemID = itemProducer.spawnArray.get(spawnValue);
             switch (itemID){
                 case (GameParams.MED_BONUS):{
-                    itemProducer.addItem(new MedKit(x,y,new Vector2(0f,speedY)));
+                    itemProducer.addItem(new MedKit(x,y,new Vector2(0f,speedY), difficultyCounter));
                     break;
                 }
                 case (GameParams.AMMO_BONUS):{
@@ -294,7 +293,6 @@ public class GameScreen implements Screen {
 
         this.update(delta);
         spriteBatch.begin();
-        stateTime += delta;
         // прокрутка фона
         renderBackground(delta);
         itemProducer.render(spriteBatch);
@@ -317,6 +315,8 @@ public class GameScreen implements Screen {
         health.setFontScale(FONT_SCALE);
         score.setText(String.valueOf( "score:  " + player.getScore()));
         score.setFontScale(FONT_SCALE);
+        difficultyLabel.setText("dfclty: " + difficultyCounter);
+        difficultyLabel.setFontScale(FONT_SCALE);
     }
 
     private void renderBackground(float delta){

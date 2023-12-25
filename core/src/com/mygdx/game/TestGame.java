@@ -11,19 +11,16 @@ public class TestGame extends Game {
 	public Music music;
 
 	// global variables
-	public static float musicVolume = 0f;
-	public static float soundVolume = 0f;
+	public static float musicVolume = 1f;
+	public static float soundVolume = 1f;
 	public static int currentDifficulty = GameParams.DIFFICULTY_MEDIUM;
 	public static int currentGameMode = GameParams.GAME_MODE_SURVIVAL;
 	public SpriteBatch batch;
-	public  int difficulty;
 	@Override
 	public void create () {
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
 		music.setLooping(true);
-		difficulty = 0;
 		batch = new SpriteBatch();
-		//this.setScreen(new GameScreen(this));
 		this.setScreen(new MenuScreen(this));
 	}
 
@@ -31,14 +28,10 @@ public class TestGame extends Game {
 	public void resize(int width, int height) {
 	}
 
-	public void  update(){
-	}
-
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.update();
 		super.render();
 	}
 

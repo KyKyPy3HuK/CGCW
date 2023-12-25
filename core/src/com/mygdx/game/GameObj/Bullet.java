@@ -7,13 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends GameObject{
-    Texture bulletHitSprite;
     Animation<TextureRegion> bulletHitAnimation;
     public float bulletHitAnimationSize = 2;
 
     public int playerTeam;
     int damage;
-    int bulletSize;
+    float bulletSize;
     @Override
     public void render(SpriteBatch batch) {
         batch.draw(texture,x,y,bulletSize,bulletSize);

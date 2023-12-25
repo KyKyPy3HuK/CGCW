@@ -14,7 +14,7 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
             meleeDmg;
     Vector2 bulletSpd;
     public Texture bulletTexture;
-    public int bulletSize;
+    public float bulletSize;
     public int bulletSpread;
     int hp;
     float acceleration;
@@ -26,9 +26,6 @@ public abstract class Actor extends GameObject implements IMortal, IDamageable {
     Sound meleeHurtSound;
     Sound dieMeleeSound;
 
-    public Sound getShootSound(){return  this.shootSound;}
-    public Sound getHurtSound(){return this.hurtSound;}
-    public Sound getDieSound(){return this.dieSound;}
     public int getHp(){
         return this.hp;
     }

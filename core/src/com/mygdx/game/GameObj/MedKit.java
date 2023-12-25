@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MedKit extends Item{
 
-    public MedKit(float x, float y, Vector2 speed){
+    public MedKit(float x, float y, Vector2 speed, int difficulty){
         this.texture = new Texture("medBonus.png");
         this.bonusStats = new ActorStats();
         this.bonusStats.hp = 50;

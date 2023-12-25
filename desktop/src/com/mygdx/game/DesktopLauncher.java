@@ -13,7 +13,9 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 
 
-		config.setTitle("TestGame");
+		config.setTitle("Bullet Heaven");
+		config.setWindowIcon("enemyRifleman.png");
+		config.setResizable(false);
 		config.setWindowedMode(700,1000);
 
 		new Lwjgl3Application(new TestGame(), config);

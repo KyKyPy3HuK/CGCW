@@ -19,18 +19,14 @@ import com.mygdx.game.TestGame;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 public class MenuScreen implements Screen {
-    //public Music music;
     Texture bgTexture;
     TestGame testGame;
     SpriteBatch batch;
     Stage stage;
     Viewport viewport;
     OrthographicCamera camera;
-    int row_height = Gdx.graphics.getWidth() / 12;
-    int col_width = Gdx.graphics.getWidth() / 12;
     private final int WORLD_HEIGHT = 1000;
     private final int WORLD_WIDTH = 700;
-    private final float STAGE_SCALE = 0.7f;
     private final float BTNS_OFFSET_X = 230;
     private final float BTNS_OFFSET_Y = 50;
 

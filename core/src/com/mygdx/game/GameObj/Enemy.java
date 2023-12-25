@@ -43,7 +43,7 @@ abstract public class Enemy extends Actor implements ISpawnable {
     @Override
     public void update(float deltaTime){
         super.update(deltaTime);
-        if (this.y < 0){
+        if (this.y < - textureHeight){
             this.hp = -100;
         }
         if (isMovingRight){
@@ -92,7 +92,7 @@ abstract public class Enemy extends Actor implements ISpawnable {
     public int takeMeleeDamage(Actor actor) {
         this.hp -= actor.meleeDmg;
         if (this.hp <= 0){
-            GameScreen.spawnBonus(this.x, this.y, this.speed.y);
+            GameScreen.spawnBonus(this.x, this.y, this.speed.y / 3);
 
             dieMeleeSound.play(TestGame.soundVolume);
             return this.killScore + this.colliseScore * actor.meleeDmg;

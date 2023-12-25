@@ -9,16 +9,16 @@ import com.mygdx.game.TestGame;
 import com.mygdx.game.interfaces.IShootable;
 import com.mygdx.screens.GameScreen;
 
-public class EnemyRifleman extends Enemy implements IShootable {
+public class EnemyRanger extends Enemy implements IShootable {
     boolean doubleShot;
     float timeSinceLastShoot;
     float reloadTime;
-    public EnemyRifleman(float x, float y, float moveRange, Vector2 speed, int difficulty){
+    public EnemyRanger(float x, float y, float moveRange, Vector2 speed, int difficulty){
         super();
-        this.hp = 70 + (int)(difficulty * 1.3f);
-        this.meleeDmg = 10;
-        this.bulletDmg = 10;
-        this.texture = new Texture("enemyRifleman.png");
+        this.hp = 50 + (difficulty);
+        this.meleeDmg = 7;
+        this.bulletDmg = 25 + (difficulty / 10);
+        this.texture = new Texture("enemyRanger.png");
         this.bulletTexture = new Texture("bulletSmallRed.png");
         this.speed = new Vector2(speed);
         this.textureHeight = GameParams.ACTOR_SIZE;
@@ -35,31 +35,23 @@ public class EnemyRifleman extends Enemy implements IShootable {
         this.maxSpeed = GameParams.RIFLEMAN_MAX_SPEED;
         this.acceleration = GameParams.RIFLEMAN_ACCELERATION;
         this.speed.x = rnd.nextFloat(-maxSpeed, maxSpeed);
-        this.bulletSpd = new Vector2(0,-20);
+        this.bulletSpd = new Vector2(0,-50);
         this.collisionRect.x = this.x;
         this.collisionRect.y = this.y;
         this.collisionRect.height = collisionHeight;
         this.collisionRect.width = collisionWidth;
         this.doubleShot = false;
-        this.reloadTime = 1f;
+        this.reloadTime = 2f;
         this.timeSinceLastShoot = rnd.nextFloat(-0f, reloadTime);
-        this.bulletSpread = 3;
-        this.bulletSize = 1;
+        this.bulletSpread = 1;
+        this.bulletSize = 1.5f;
         this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hurt.wav"));
 
     }
     @Override
     public void shoot(){
         if (isReadyToShoot()){
-            if(doubleShot){
-                GameScreen.bulletProducer.addBullet(new Bullet(this.x + 1,this.y + 1,this));
-                doubleShot = false;
-            }
-            else
-            {
-                GameScreen.bulletProducer.addBullet(new Bullet(this.x + 4,this.y + 1,this));
-                doubleShot = true;
-            }
+            GameScreen.bulletProducer.addBullet(new Bullet(this.x + 2,this.y + 1,this));
             timeSinceLastShoot = 0;
             this.shootSound.play(TestGame.soundVolume);
         }

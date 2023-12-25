@@ -37,7 +37,7 @@ public class Player extends Actor implements IShootable {
         return this.ammo;
     }
     public Player(int x, int y, Vector2 speed){
-        this.hp = 1000;
+        this.hp = 300;
         this.score = 0;
         this.ammo = 200;
         this.acceleration = 1.f;

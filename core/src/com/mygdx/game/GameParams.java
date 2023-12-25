@@ -10,11 +10,11 @@ public class GameParams {
     public static final int GAME_MODE_SURVIVAL = 0;
     public static final int GAME_MODE_WAVES = 1;
     public static final int DIFFICULTY_EASY = 0;
-    public static final int DIFFICULTY_EASY_DEFAULT_COUNTER = 10;
+    public static final int DIFFICULTY_EASY_DEFAULT_COUNTER = 20;
     public static final int DIFFICULTY_MEDIUM = 1;
-    public static final int DIFFICULTY_MEDIUM_DEFAULT_COUNTER = 15;
+    public static final int DIFFICULTY_MEDIUM_DEFAULT_COUNTER = 25;
     public static final int DIFFICULTY_HARD = 2;
-    public static final int DIFFICULTY_HARD_DEFAULT_COUNTER = 20;
+    public static final int DIFFICULTY_HARD_DEFAULT_COUNTER = 30;
     public static final float EASY_GAME_TICK = 10f;
     public static final float MEDIUM_GAME_TICK = 5f;
     public static final float HARD_GAME_TICK = 3f;
@@ -22,8 +22,12 @@ public class GameParams {
 
     // Enemy consts
     public static final int RIFLEMAN = 0;
+    public static final int RIFLEMAN_SPAWN_WEIGHT = 50;
     public static final int KAMIKAZE = 1;
+    public static final int KAMIKAZE_SPAWN_WEIGHT = 20;
+
     public static final int RANGER = 2;
+    public static final int RANGER_SPAWN_WEIGHT = 80;
 
 
 
@@ -43,13 +47,13 @@ public class GameParams {
 
 
     // Bonus spawn chance values
-    public static final int MED_BONUS_SPAWN_WEIGHT = 2;
-    public static final int AMMO_BONUS_SPAWN_WEIGHT = 4;
+    public static final int MED_BONUS_SPAWN_WEIGHT = 4;
+    public static final int AMMO_BONUS_SPAWN_WEIGHT = 5;
     public static final int RELOAD_BONUS_SPAWN_WEIGHT = 2;
     public static final int SPEED_SPAWN_WEIGHT = 1;
-    public static final int BULLET_DAMAGE_BONUS_SPAWN_WEIGHT = 1;
+    public static final int BULLET_DAMAGE_BONUS_SPAWN_WEIGHT = 2;
     public static final int MELEE_DAMAGE_BONUS_SPAWN_WEIGHT = 1;
-    public static final int SCORE_BONUS_SPAWN_WEIGHT = 7;
+    public static final int SCORE_BONUS_SPAWN_WEIGHT = 3;
 
 
     // Teams
@@ -73,6 +77,11 @@ public class GameParams {
     public static final float RIFLEMAN_ACCELERATION = 0.3f;
     public static final float RIFLEMAN_MAX_MOVE_RANGE = 20f;
     public static final float RIFLEMAN_MIN_MOVE_RANGE = 5f;
+
+    public static final float KAMIKAZE_MAX_SPEED = 25f;
+    public static final float KAMIKAZE_ACCELERATION = 0.5f;
+    public static final float KAMIKAZE_MAX_MOVE_RANGE = 20f;
+    public static final float KAMIKAZE_MIN_MOVE_RANGE = 10;
 
 
 }

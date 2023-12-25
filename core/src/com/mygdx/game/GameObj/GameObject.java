@@ -13,7 +13,7 @@ abstract public class GameObject implements IRenderable , IUpdatable , ICollisio
     // Поля
     float x,  y;
     float textureWidth, textureHeight;
-    float collisionWidth,collisionHeight;
+    float collisionWidth, collisionHeight;
     float collisionOffsetX = 0, collisionOffsetY = 0;
     Vector2 speed;
     static Random rnd = new Random();

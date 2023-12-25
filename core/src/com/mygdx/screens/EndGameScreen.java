@@ -22,8 +22,8 @@ public class EndGameScreen implements Screen {
     int col_width = Gdx.graphics.getWidth() / 12;
     private final int WORLD_HEIGHT = 1000;
     private final int WORLD_WIDTH = 700;
-    private final float STAGE_SCALE = 0.7f;
-    private final float BTNS_OFFSET_X = 160;
+
+    private final float BTNS_OFFSET_X = 230;
     private final float BTNS_OFFSET_Y = 55;
     int score;
     Camera camera;
@@ -45,7 +45,7 @@ public class EndGameScreen implements Screen {
         batch = testGame.batch;
         stage = new Stage(viewport,batch);
         Gdx.input.setInputProcessor(stage);
-        scoreLabel = new Label("You are dead :( Your score: " + score , skin);
+        scoreLabel = new Label("You are dead :( score: " + score , skin);
 
         continueButton = new TextButton("Continue",skin);
 
@@ -54,14 +54,10 @@ public class EndGameScreen implements Screen {
     @Override
     public void show() {
         stage.addActor(scoreLabel);
-        continueButton.setTransform(true);
-        continueButton.setTransform(true);
-        continueButton.setSize(col_width*4,row_height);
-        continueButton.scaleBy(STAGE_SCALE);
         continueButton.setPosition(BTNS_OFFSET_X,BTNS_OFFSET_Y * 4);
         stage.addActor(continueButton);
-        scoreLabel.setFontScale(STAGE_SCALE * STAGE_SCALE * 2);
-        scoreLabel.setPosition(BTNS_OFFSET_X - 55 ,BTNS_OFFSET_Y * 8);
+        scoreLabel.setFontScale(1);
+        scoreLabel.setPosition(BTNS_OFFSET_X - 120 ,BTNS_OFFSET_Y * 8);
 
         Sound loseSound = Gdx.audio.newSound(Gdx.files.internal("sounds/lose.wav"));
         loseSound.play(TestGame.soundVolume);
